@@ -99,7 +99,9 @@ export function MainPage(): JSX.Element {
                 <p className="product-card__price"><span className="visually-hidden">Цена:</span>10 500 ₽
                 </p>
               </div>
-              <div className="product-card__buttons"><a className="button button--mini" href="#">Подробнее</a><a className="button button--red button--mini button--add-to-cart" href="#">Купить</a>
+              <div className="product-card__buttons">
+                <a className="button button--mini" href="/">Подробнее</a>
+                <a className="button button--red button--mini button--add-to-cart" href="/">Купить</a>
               </div>
             </div>
             <div className="product-card"><img src="img/content/catalog-product-1.png" srcSet="img/content/catalog-product-1@2x.png 2x" width="75" height="190" alt="Честер Bass" />
@@ -127,7 +129,8 @@ export function MainPage(): JSX.Element {
                 <p className="product-card__price"><span className="visually-hidden">Цена:</span>17 500 ₽
                 </p>
               </div>
-              <div className="product-card__buttons"><a className="button button--mini" href="#">Подробнее</a><a className="button button--red-border button--mini button--in-cart" href="#">В Корзине</a>
+              <div className="product-card__buttons"><a className="button button--mini" href="/">Подробнее</a>
+              <a className="button button--red-border button--mini button--in-cart" href="/">В Корзине</a>
               </div>
             </div>
             <div className="product-card"><img src="img/content/catalog-product-2.png" srcSet="img/content/catalog-product-2@2x.png 2x" width="75" height="190" alt="Roman RX" />
