@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from '../components/layout/layout';
 import { AppRoute } from '../consts';
-import { MainPage } from '../pages/catalog-page/main-page';
+import { MainPage } from '../pages/main-page/main-page';
 import { LoginPage } from '../pages/login-page/login-page';
 
 export function App(): JSX.Element {
