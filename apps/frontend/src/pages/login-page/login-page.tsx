@@ -1,5 +1,3 @@
-
-
 export function LoginPage(): JSX.Element {
   return (
     <main className="page-content">
