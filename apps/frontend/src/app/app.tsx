@@ -1,11 +1,17 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
+import { Routes, Route } from 'react-router-dom';
+import { Layout } from '../components/layout/layout';
+import { AppRoute } from '../consts';
+import { MainPage } from '../pages/catalog-page/main-page';
+import { LoginPage } from '../pages/login-page/login-page';
 
-export function App() {
+export function App(): JSX.Element {
   return (
-      <div>
-        Hello world
-      </div>
+    <Routes>
+      <Route path={AppRoute.Main} element={<Layout />}>
+        <Route path={AppRoute.Main} element={<MainPage />}/>
+        <Route path={AppRoute.Login} element={<LoginPage />}/>
+      </Route>
+    </Routes>
   );
 }
 
