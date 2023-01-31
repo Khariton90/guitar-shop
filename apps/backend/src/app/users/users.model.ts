@@ -1,14 +1,6 @@
 import { Document } from 'mongoose';
-// import { User } from '@readme/shared-types';
+import { User } from '@guitar-shop/shared-types';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
-export interface User {
-  _id?: string;
-  username: string;
-  email: string;
-  passwordHash: string;
-  userRole: string;
-}
 
 @Schema({
   collection: 'users'
