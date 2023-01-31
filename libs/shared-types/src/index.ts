@@ -5,3 +5,4 @@ export * from './lib/product.interface';
 export * from './lib/string.enum';
 export * from './lib/comment.interface';
 export * from './lib/order.interface';
+export * from './lib/extended-user-request.interface';
