@@ -13,6 +13,7 @@ import { CommentsModule } from './comments/comments.module';
 import { OrdersService } from './orders/orders.service';
 import { OrdersController } from './orders/orders.controller';
 import { OrdersModule } from './orders/orders.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     CommentsModule,
     OrdersModule,
+    AuthModule,
   ],
   controllers: [AppController, OrdersController],
   providers: [AppService, OrdersService],
