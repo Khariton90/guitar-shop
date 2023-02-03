@@ -10,5 +10,15 @@ export enum AppRoute {
   Cart = 'cart',
   NotFound = '*',
   Login = 'login',
-  Register = 'Register'
+  Register = 'register'
+}
+
+export enum AuthStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
+}
+
+export enum ApiRoute {
+  ProductList = 'products',
 }

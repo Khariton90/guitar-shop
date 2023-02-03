@@ -11,6 +11,7 @@ import { OrderListPage } from '../pages/order-list-page/order-list-page';
 import { OrderItemPage } from '../pages/order-item-page/order-item-page';
 import { AddProductItemPage } from '../pages/add-product-item-page/add-product-item-page';
 import { ChangeProductItemPage } from '../pages/change-product-item-page/change-product-item-page';
+import { PrivateRoute } from '../components/private-route/private-route';
 
 export function App(): JSX.Element {
   return (
@@ -19,12 +20,31 @@ export function App(): JSX.Element {
         <Route path={AppRoute.Main} element={<MainPage />}/>
         <Route path={AppRoute.Login} element={<LoginPage />}/>
         <Route path={AppRoute.Product} element={<ProductItemPage />}/>
-        <Route path={AppRoute.ProductList} element={<ProductListPage />}/>
-        <Route path={AppRoute.AddProduct} element={<AddProductItemPage />}/>
+        <Route path={AppRoute.ProductList} element={
+          <PrivateRoute>
+            <ProductListPage />
+          </PrivateRoute>
+        }/>
+        <Route path={AppRoute.AddProduct} element={
+          <PrivateRoute>
+            <AddProductItemPage />
+          </PrivateRoute>
+        }/>
+        
         <Route path={AppRoute.ProductChange} element={<ChangeProductItemPage />}/>
         <Route path={AppRoute.Cart} element={<CartPage />}/>
-        <Route path={AppRoute.OrderList} element={<OrderListPage />}/>
-        <Route path={AppRoute.Order} element={<OrderItemPage />}/>
+
+        <Route path={AppRoute.OrderList} element={
+          <PrivateRoute>
+            <OrderListPage />
+          </PrivateRoute>
+        }/>
+
+        <Route path={AppRoute.Order} element={
+          <PrivateRoute>
+            <OrderItemPage />
+          </PrivateRoute>
+        }/>
         <Route path={AppRoute.NotFound} element={<NotFoundPage />}/>
       </Route>
     </Routes>

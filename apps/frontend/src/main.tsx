@@ -5,6 +5,9 @@ import browserHistory from './browser-history';
 import HistoryRouter from './components/history-router/history-router';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { fetchProductsAction } from './store/api-actions';
+
+store.dispatch(fetchProductsAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
