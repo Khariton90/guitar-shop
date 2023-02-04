@@ -17,15 +17,19 @@ export class ProductsController {
   @Post('/')
   async create(@Body() dto: CreateProductDto, @Req() { user }: ExtendedUserRequest) {
     const product = await this.productsService.create(dto);
-
     return fillObject(ResponseProductDto, product);
   }
 
   @Get('/')
-  async find() {
+  async findAll() {
     const productList = await this.productsService.find();
-
     return fillObject(ResponseProductDto, productList);
+  }
+
+  @Get('/:id')
+  async findOne(@Param('id') id: string) {
+    const product = await this.productsService.findById(id);
+    return fillObject(ResponseProductDto, product);
   }
 
   @Get('images/:filename')

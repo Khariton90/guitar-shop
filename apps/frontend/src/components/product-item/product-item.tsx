@@ -1,7 +1,6 @@
-import { MouseEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthStatus } from "../../consts";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getOneProduct } from "../../store/api-actions";
 import { ProductDto } from "../../types/product.dto";
 
 type ProductItemProps = {
@@ -12,7 +11,7 @@ type ProductItemProps = {
 export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Element {
   const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
 
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleClick = (evt: { preventDefault: () => void; }) => {
     evt.preventDefault();
     if (authStatus !== AuthStatus.Auth) {
@@ -22,7 +21,7 @@ export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Elem
 
   const handleNavigate = (evt: { preventDefault: () => void; }, id: string) => {
     evt.preventDefault();
-    navigate(`/product/${id}`);
+    dispatch(getOneProduct(id));
   };
 
   return (

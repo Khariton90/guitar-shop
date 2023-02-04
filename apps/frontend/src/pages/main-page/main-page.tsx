@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
 import { useAppSelector } from "../../hooks";
@@ -28,6 +29,7 @@ export function MainPage(): JSX.Element {
     }
   }, [keyPressCloseModal, modal])
 
+
   return (
     <>
       {!modal || <ModalEnter modal={modal} onShowModal={showModal} />}
@@ -35,7 +37,7 @@ export function MainPage(): JSX.Element {
         <div className="container">
           <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">Главная</a>
+            <li className="breadcrumbs__item"><NavLink className="link" to={'/'}>Главная</NavLink>
             </li>
             <li className="breadcrumbs__item"><a href="/" className="link">Каталог</a>
             </li>

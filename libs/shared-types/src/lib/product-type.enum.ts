@@ -1,5 +1,5 @@
 export enum ProductTypeEnum {
-  Electro = 'электро',
-  Acustic = 'акустика',
-  Ukulele = 'укулеле',
+  Electro = 'el-guitar',
+  Acustic = 'guitar',
+  Ukulele = 'ukulele',
 }

@@ -4,12 +4,12 @@ export interface ProductDto {
   id: string;
   title: string;
   description: string;
-  date: Date;
+  date: Date | string;
   image: string;
   type: ProductTypeEnum,
   article: string;
   strings: StringEnum,
-  rating: number;
   price: number;
-  feeds: number;
+  rating?: number;
+  feeds?: number;
 }

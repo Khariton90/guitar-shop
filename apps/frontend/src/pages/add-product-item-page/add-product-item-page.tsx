@@ -1,5 +1,35 @@
+import { ChangeEvent, useEffect, useState } from "react"
+import { ProductDto } from "../../types/product.dto";
+import dayjs from 'dayjs';
+import { ProductTypeEnum, StringEnum } from "@guitar-shop/shared-types";
 
 export function AddProductItemPage(): JSX.Element {
+
+  const [product, setProduct] = useState<ProductDto>({
+    id: '',
+    title: '',
+    description: '',
+    date: dayjs(new Date()).toISOString(),
+    image: '',
+    type: ProductTypeEnum.Electro,
+    article: '',
+    strings: StringEnum.Four,
+    price: 100,
+  });
+
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    setProduct((prevProduct) => (
+      {
+        ...prevProduct, 
+        [evt.target.name]: evt.target.value
+      }
+    ))
+  }
+
+  useEffect(() => {
+    console.log(product);
+  }, [product]);
+
   return (
     <main className="page-content">
       <section className="add-item">
@@ -25,15 +55,15 @@ export function AddProductItemPage(): JSX.Element {
                 </div>
               </div>
               <div className="input-radio add-item__form-radio"><span>Выберите тип товара</span>
-                <input type="radio" id="guitar" name="item-type" value="guitar" />
+                <input type="radio" id="guitar" name="type" defaultValue={ProductTypeEnum.Acustic} onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="guitar">Акустическая гитара</label>
-                <input type="radio" id="el-guitar" name="item-type" value="el-guitar" checked />
+                <input type="radio" id="el-guitar" name="type" defaultValue={ProductTypeEnum.Electro} defaultChecked onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="el-guitar">Электрогитара</label>
-                <input type="radio" id="ukulele" name="item-type" value="ukulele" />
+                <input type="radio" id="ukulele" name="type" defaultValue={ProductTypeEnum.Ukulele} onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="ukulele">Укулеле</label>
               </div>
               <div className="input-radio add-item__form-radio"><span>Количество струн</span>
-                <input type="radio" id="string-qty-4" name="string-qty" value="4" checked />
+                <input type="radio" id="string-qty-4" name="string-qty" value="4" defaultChecked />
                 <label htmlFor="string-qty-4">4</label>
                 <input type="radio" id="string-qty-6" name="string-qty" value="6" />
                 <label htmlFor="string-qty-6">6</label>
@@ -64,7 +94,7 @@ export function AddProductItemPage(): JSX.Element {
               </div>
               <div className="custom-input add-item__form-input">
                 <label><span>Введите артикул товара</span>
-                  <input type="text" name="sku" value="" placeholder="Артикул товара" />
+                  <input type="text" name="article" placeholder="Артикул товара" />
                 </label>
                 <p>Заполните поле</p>
               </div>

@@ -3,7 +3,7 @@ import { ApiRoute, AppRoute, AuthStatus } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, requireAutorization, setUserData } from './action';
+import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
 
@@ -31,5 +31,16 @@ export const registerUserAction = createAsyncThunk<void, RegisterData, {dispatch
     const {data} = await api.post<UserDto>(ApiRoute.Register, {username, email, password});
   
     dispatch(redirectToRoute(AppRoute.Login)); 
+  },
+);
+
+type Id = string;
+
+export const getOneProduct = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/getOneProduct',
+  async (id , {dispatch, extra: api}) => {
+    const {data} = await api.get<ProductDto>(`${ApiRoute.ProductList}/${id}`);
+    dispatch(getProductCard(data));
+    dispatch(redirectToRoute(`product/${id}`)); 
   },
 );
