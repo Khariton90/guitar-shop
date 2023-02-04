@@ -6,6 +6,8 @@ import HistoryRouter from './components/history-router/history-router';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { fetchProductsAction } from './store/api-actions';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 store.dispatch(fetchProductsAction());
 
@@ -16,6 +18,7 @@ root.render(
   <StrictMode>
     <Provider store={store}>
       <HistoryRouter history={browserHistory}>
+        <ToastContainer />
         <App />
       </HistoryRouter>
     </Provider>

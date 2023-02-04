@@ -1,13 +1,10 @@
-import { CliCommand } from '@guitar-shop/core';
-import { Injectable } from '@nestjs/common';
+import { CliCommand } from "@guitar-shop/core";
 
 type ParsedCommand = {
   [key: string]: string[]
 }
 
-
-@Injectable()
-export class AppService {
+export default class CliApplication {
   private commands: {[propName: string]: CliCommand} = {};
   private defaultCommand = '--help';
 

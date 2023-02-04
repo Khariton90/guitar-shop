@@ -1,9 +1,16 @@
 import { createAction } from '@reduxjs/toolkit';
+import { AppRoute } from '../consts';
 
-export const getUserData = createAction('data/getUserData', (data) => ({
+export const redirectToRoute = createAction<AppRoute>('data/redirectToRoute');
+
+export const loadProducts = createAction('data/loadProducts', (data) => ({
   payload: data
 }));
 
-export const loadProducts = createAction('data/loadProducts', (data) => ({
+export const setUserData = createAction('data/setUserData', (data) => ({
+  payload: data
+}));
+
+export const requireAutorization = createAction('data/requireAutorization', (data) => ({
   payload: data
 }));

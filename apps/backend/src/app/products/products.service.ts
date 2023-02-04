@@ -1,3 +1,4 @@
+import { Product } from './../../../../../libs/shared-types/src/lib/product.interface';
 import { CreateProductDto } from './dto/create-product-dto';
 import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
@@ -17,5 +18,9 @@ export class ProductsService {
     });
 
     return await this.productsRepository.create(productEntity);
+  }
+
+  async find(): Promise<Product[]>{
+    return await this.productsRepository.find();
   }
 }

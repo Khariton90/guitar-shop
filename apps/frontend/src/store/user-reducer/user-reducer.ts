@@ -1,13 +1,23 @@
+import { requireAutorization } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
-import { getUserData } from '../action';
+import { AuthStatus } from '../../consts';
+import { setUserData } from '../action';
 
-const initialState = {
-  user: {}
+type UserState = {
+  user: object,
+  autorizationStatus: AuthStatus
+}
+
+const initialState: UserState = {
+  user: {},
+  autorizationStatus: AuthStatus.Unknown
 };
 
 const userReducer = createReducer(initialState, (builder) => {
-  builder.addCase(getUserData, (state, action) => {
+  builder.addCase(setUserData, (state, action) => {
     state.user = action.payload
+  }).addCase(requireAutorization, (state, action) => {
+    state.autorizationStatus = action.payload;
   })
 });
 

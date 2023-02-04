@@ -11,6 +11,7 @@ import { CommentsModule } from './comments/comments.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 import { jwtOptions } from './config/jwt.config';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { jwtOptions } from './config/jwt.config';
     MongooseModule.forRootAsync(getMongoDbConfig()),
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}

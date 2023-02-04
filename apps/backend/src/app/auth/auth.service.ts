@@ -14,11 +14,12 @@ export class AuthService {
 
   async authorization(user: LoginUserDto) {
     const existUser = await this.usersService.findByEmail(user.email);
-    const validPassword = await new UsersEntity(existUser).comparePassword(user.password);
 
     if (!existUser) {
       throw new UnauthorizedException();
     }
+    
+    const validPassword = await new UsersEntity(existUser).comparePassword(user.password);
 
     if (!validPassword) {
       throw new UnauthorizedException();

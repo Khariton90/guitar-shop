@@ -1,19 +1,26 @@
+import { Link, useNavigate } from "react-router-dom";
+import { AppRoute } from "../../consts";
 
 export function Header(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <header className="header" id="header">
       <div className="container">
         <div className="header__wrapper">
-          <a href="/" className="header__logo logo">
+          <Link className="header__logo logo" to={AppRoute.Main}>
             <img className="logo__img" width="70" height="70" src="./assets/img/svg/logo.svg" alt="Логотип" />
-          </a>
+          </Link>
           <nav className="main-nav">
             <ul className="main-nav__list">
-              <li className="main-nav__item"><a className="link main-nav__link link--current" href="/">Каталог</a>
+              <li className="main-nav__item" onClick={() => navigate(AppRoute.Main)}>
+                <Link className="link main-nav__link link--current" to={AppRoute.Main}>Каталог</Link>
               </li>
-              <li className="main-nav__item"><a className="link main-nav__link" href="/">Где купить?</a>
+              <li className="main-nav__item" onClick={() => navigate(AppRoute.Main)}>
+                <Link className="link main-nav__link link--current" to={AppRoute.Main}>Гду купить?</Link>
               </li>
-              <li className="main-nav__item"><a className="link main-nav__link" href="/">О компании</a>
+              <li className="main-nav__item" onClick={() => navigate(AppRoute.Main)}>
+                <Link className="link main-nav__link link--current" to={AppRoute.Main}>О компании</Link>
               </li>
             </ul>
           </nav>

@@ -1,6 +1,6 @@
 import { UsersEntity } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -8,6 +8,9 @@ export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async registration({username, email, password, userRole}: CreateUserDto) {
+    if (await this.usersRepository.findByEmail(email)) {
+      throw new ConflictException(409, 'User already exist');
+    }
 
     const user = {
       username,

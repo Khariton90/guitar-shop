@@ -11,7 +11,7 @@ import { fillObject } from '@guitar-shop/core';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('/')
+  @Post('register')
   async create(@Body() dto: CreateUserDto) {
     const user = await this.usersService.registration(dto);
     return fillObject(ResponseUserDto, user);

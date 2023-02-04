@@ -12,6 +12,7 @@ import { OrderItemPage } from '../pages/order-item-page/order-item-page';
 import { AddProductItemPage } from '../pages/add-product-item-page/add-product-item-page';
 import { ChangeProductItemPage } from '../pages/change-product-item-page/change-product-item-page';
 import { PrivateRoute } from '../components/private-route/private-route';
+import { RegisterPage } from '../pages/register-page/register-page';
 
 export function App(): JSX.Element {
   return (
@@ -19,6 +20,7 @@ export function App(): JSX.Element {
       <Route path={AppRoute.Main} element={<Layout />}>
         <Route path={AppRoute.Main} element={<MainPage />}/>
         <Route path={AppRoute.Login} element={<LoginPage />}/>
+        <Route path={AppRoute.Register} element={<RegisterPage />}/>
         <Route path={AppRoute.Product} element={<ProductItemPage />}/>
         <Route path={AppRoute.ProductList} element={
           <PrivateRoute>

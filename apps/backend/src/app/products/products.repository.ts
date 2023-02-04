@@ -1,3 +1,4 @@
+import { DEFAULT_LIMIT_PRODUCTS } from './products.constant';
 import { ProductsModel } from './products.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
@@ -13,8 +14,14 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
     @InjectModel(ProductsModel.name) private readonly productsModel: Model<ProductsModel>
   ){}
 
+  public async find(): Promise<Product[] | []> {
+    const productList = this.productsModel.find().limit(DEFAULT_LIMIT_PRODUCTS);
+    return productList;
+  }
+
   public async findById(id: string): Promise<Product> {
-    throw new Error('Method not implemented.');
+    const existProduct = this.productsModel.findById(id);
+    return existProduct;
   }
   
   public async create(item: ProductsEntity): Promise<Product> {
@@ -27,6 +34,6 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
   }
   
   public async destroy(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.productsModel.findOneAndDelete({id});
   }
 }
