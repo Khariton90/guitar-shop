@@ -26,3 +26,7 @@
   max-height: inherit;
   max-width: inherit;
 }
+
+.button__red {
+  border-top: 12px solid #c90606!important;
+}

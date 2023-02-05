@@ -5,11 +5,8 @@ import browserHistory from './browser-history';
 import HistoryRouter from './components/history-router/history-router';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { fetchProductsAction } from './store/api-actions';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-store.dispatch(fetchProductsAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -1,4 +1,5 @@
-import { DEFAULT_LIMIT_PRODUCTS } from './products.constant';
+import { ProductsQuery } from './query/products.query';
+import { DEFAULT_LIMIT_PRODUCTS, DEFAULT_SORT_DIRECTION } from './products.constant';
 import { ProductsModel } from './products.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
@@ -14,10 +15,22 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
     @InjectModel(ProductsModel.name) private readonly productsModel: Model<ProductsModel>
   ){}
 
-  public async find(): Promise<Product[] | []> {
-    const productList = this.productsModel.find().limit(DEFAULT_LIMIT_PRODUCTS);
-    return productList;
+  public async find(query: ProductsQuery): Promise<Product[] | []> {
+    const sortingType = Object.entries(query);
+
+    if (sortingType.length) {
+      return await this.productsModel.find()
+      .sort([...sortingType])
+      .limit(DEFAULT_LIMIT_PRODUCTS)
+      .exec();
+    }
+
+    return await this.productsModel.find()
+      .sort({date: -1})
+      .limit(DEFAULT_LIMIT_PRODUCTS)
+      .exec();
   }
+  
 
   public async findById(id: string): Promise<Product> {
     const existProduct = this.productsModel.findById(id);

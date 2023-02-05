@@ -62,4 +62,11 @@ export class ResponseProductDto {
   })
   @Expose()
   price: number;
+
+  @ApiProperty({
+    required: true,
+    example: '1',
+  })
+  @Expose()
+  rating: number;
 }

@@ -3,7 +3,8 @@ import { Product, ProductTypeEnum, StringEnum } from '@guitar-shop/shared-types'
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 
 @Schema({
-  collection: 'products'
+  collection: 'products',
+  timestamps: true
 })
 export class ProductsModel extends Document implements Product {
   @Prop({
@@ -68,6 +69,7 @@ export class ProductsModel extends Document implements Product {
     default: 100
   })
   price: number;
+
   feeds: number;
 }
 

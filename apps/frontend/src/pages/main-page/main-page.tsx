@@ -1,14 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { FormEvent, useCallback, useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchProductsAction } from "../../store/api-actions";
+import cn from 'classnames';
 
 export function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const products = useAppSelector(({ dataReducer }) => dataReducer.products);
   const [modal, setModal] = useState(false);
+  const [submitForm, setSubmitForm] = useState({});
+  const [sortDirection, setSortDirection] = useState<number | null>(null);
+  const [sortType, setSortType] = useState<string | null>(null);
+
+  console.log(useParams());
+
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+  }
+
+  const handleSort = (value: string) => {
+    setSortType((prevType) => (prevType = value));
+  }
+
   const showModal = (value: boolean) => {
     setModal((prev) => (prev = value));
   };
@@ -20,7 +35,7 @@ export function MainPage(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchProductsAction());
+    dispatch(fetchProductsAction({type: sortType, sort: sortDirection}));
     
     if (modal) {
       document.body.addEventListener('keydown', keyPressCloseModal);
@@ -31,7 +46,7 @@ export function MainPage(): JSX.Element {
       document.body.removeEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = '';
     }
-  }, [dispatch, keyPressCloseModal, modal])
+  }, [dispatch, keyPressCloseModal, modal, sortDirection, sortType])
 
 
   return (
@@ -47,7 +62,7 @@ export function MainPage(): JSX.Element {
             </li>
           </ul>
           <div className="catalog">
-            <form className="catalog-filter">
+            <form className="catalog-filter" onSubmit={handleSubmit}>
               <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Цена, ₽</legend>
@@ -101,12 +116,12 @@ export function MainPage(): JSX.Element {
             <div className="catalog-sort">
               <h2 className="catalog-sort__title">Сортировать:</h2>
               <div className="catalog-sort__type">
-                <button className="catalog-sort__type-button" aria-label="по цене">по цене</button>
-                <button className="catalog-sort__type-button" aria-label="по популярности">по популярности</button>
+                <button className="catalog-sort__type-button" aria-label="по цене" onClick={() => handleSort('price')}>по цене</button>
+                <button className="catalog-sort__type-button" aria-label="по популярности" onClick={() => handleSort('rating')}>по популярности</button>
               </div>
               <div className="catalog-sort__order">
-                <button className="catalog-sort__order-button catalog-sort__order-button--up" aria-label="По возрастанию"></button>
-                <button className="catalog-sort__order-button catalog-sort__order-button--down" aria-label="По убыванию"></button>
+                <button className={cn("catalog-sort__order-button catalog-sort__order-button--up", {"button__red": sortDirection === 1})} aria-label="По возрастанию" onClick={() => setSortDirection(1)}></button>
+                <button className={cn("catalog-sort__order-button catalog-sort__order-button--down", {"button__red": sortDirection === -1})} aria-label="По убыванию" onClick={() => setSortDirection(-1)}></button>
               </div>
             </div>
             <div className="cards catalog__cards">

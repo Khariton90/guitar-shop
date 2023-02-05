@@ -9,10 +9,11 @@ import { AuthData, RegisterData } from '../types/auth-data';
 
 type Id = string;
 
-export const fetchProductsAction = createAsyncThunk<void, undefined, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+export const fetchProductsAction = createAsyncThunk<void, {type: string | null, sort: number | null}, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchProducts',
-  async (_arg, {dispatch, extra: api}) => {
-    const { data } = await api.get<ProductDto[]>(ApiRoute.ProductList);
+  async ({type, sort}, {dispatch, extra: api}) => {
+    const connectionString = type ? `${ApiRoute.ProductList}/?${type}=${sort}` : ApiRoute.ProductList;
+    const { data } = await api.get<ProductDto[]>(connectionString);
     dispatch(loadProducts(data));
   }
 );

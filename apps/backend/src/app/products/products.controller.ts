@@ -1,3 +1,4 @@
+import { ProductsQuery } from './query/products.query';
 import { BASE_IMAGES_URL } from './products.constant';
 import { ApiTags } from '@nestjs/swagger';
 import { ExtendedUserRequest } from '@guitar-shop/shared-types';
@@ -5,7 +6,7 @@ import { ResponseProductDto } from './rdo/response-product.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from './../guards/jwt-auth.guard';
-import { Body, Controller, Post, UseGuards, Req, Get, Param, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Req, Get, Param, Res, UploadedFile, UseInterceptors, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -27,8 +28,8 @@ export class ProductsController {
   }
 
   @Get('/')
-  async findAll() {
-    const productList = await this.productsService.find();
+  async findAll(@Query() query: ProductsQuery) {
+    const productList = await this.productsService.find(query);
     return fillObject(ResponseProductDto, productList);
   }
 
