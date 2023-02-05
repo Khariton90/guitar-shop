@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ProductTypeEnum, StringEnum } from "@guitar-shop/shared-types";
 
-
 export class CreateProductDto {
   @ApiProperty({
     required: true,
@@ -18,6 +17,7 @@ export class CreateProductDto {
 
   @ApiProperty({
     required: true,
+    default: '',
     example: 'image.png',
   })
   image: string;
