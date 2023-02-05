@@ -1,0 +1,27 @@
+.edit-item-image__btn-wrap {
+  position: relative;
+}
+
+.file {
+  position: absolute;
+  left: 7px;
+  top: 0px;
+  height: 40px;
+  display: block;
+  width: 100px;
+  cursor: pointer;
+}
+
+.file.hidden {
+  opacity: 0;
+  cursor: pointer;
+}
+
+.edit-item-image__image-wrap {
+  overflow: hidden;
+}
+
+.edit-item-image__image-wrap img {
+  width: 100%;
+  height: auto;
+}

@@ -1,9 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { ProductTypeEnum, StringEnum } from "@guitar-shop/shared-types";
 import { ProductDto } from "../../types/product.dto";
 import dayjs from 'dayjs';
-import { ProductTypeEnum, StringEnum } from "@guitar-shop/shared-types";
 
 export function AddProductItemPage(): JSX.Element {
+  const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
+  const [preview, setPreview] = useState<string | undefined>();
 
   const [product, setProduct] = useState<ProductDto>({
     id: '',
@@ -17,18 +19,47 @@ export function AddProductItemPage(): JSX.Element {
     price: 100,
   });
 
+
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    setProduct((prevProduct) => (
-      {
-        ...prevProduct, 
-        [evt.target.name]: evt.target.value
-      }
-    ))
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [evt.target.name]: evt.target.value
+    }))
+  }
+  const handleSubmut = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
   }
 
   useEffect(() => {
-    console.log(product);
-  }, [product]);
+    if (!selectedFile) {
+      setPreview(undefined);
+      return
+    }
+
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile)
+      setPreview(objectUrl)
+
+      return () => URL.revokeObjectURL(objectUrl)
+    }
+
+  }, [selectedFile])
+
+  const handleSetPreviewImage = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (!evt.target.files || evt.target.files.length === 0) {
+      setSelectedFile(undefined)
+      return
+    }
+
+    if (evt.target.files) {
+      setSelectedFile(evt.target.files[0])
+    }
+  }
+
+  const handleDeleteImage = () => {
+    setSelectedFile(undefined);
+    setPreview(undefined);
+  }
 
   return (
     <main className="page-content">
@@ -43,23 +74,25 @@ export function AddProductItemPage(): JSX.Element {
             <li className="breadcrumbs__item"><a className="link" href="./main.html">Новый товар</a>
             </li>
           </ul>
-          <form className="add-item__form" action="#" method="get">
+          <form className="add-item__form" action="#" method="get" onSubmit={handleSubmut}>
             <div className="add-item__form-left">
               <div className="edit-item-image add-item__form-image">
                 <div className="edit-item-image__image-wrap">
+                  {selectedFile && <img src={preview} alt="" />}
                 </div>
                 <div className="edit-item-image__btn-wrap">
                   <button className="button button--small button--black-border edit-item-image__btn">Добавить
+                    <input type="file" className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage} />
                   </button>
-                  <button className="button button--small button--black-border edit-item-image__btn">Удалить</button>
+                  <button className="button button--small button--black-border edit-item-image__btn" onClick={handleDeleteImage}>Удалить</button>
                 </div>
               </div>
               <div className="input-radio add-item__form-radio"><span>Выберите тип товара</span>
-                <input type="radio" id="guitar" name="type" defaultValue={ProductTypeEnum.Acustic} onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="guitar" name="type" defaultValue={ProductTypeEnum.Acustic} onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="guitar">Акустическая гитара</label>
-                <input type="radio" id="el-guitar" name="type" defaultValue={ProductTypeEnum.Electro} defaultChecked onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="el-guitar" name="type" defaultValue={ProductTypeEnum.Electro} defaultChecked onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="el-guitar">Электрогитара</label>
-                <input type="radio" id="ukulele" name="type" defaultValue={ProductTypeEnum.Ukulele} onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="ukulele" name="type" defaultValue={ProductTypeEnum.Ukulele} onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="ukulele">Укулеле</label>
               </div>
               <div className="input-radio add-item__form-radio"><span>Количество струн</span>
