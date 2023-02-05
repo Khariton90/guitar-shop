@@ -18,3 +18,11 @@ export const requireAutorization = createAction('data/requireAutorization', (dat
 export const getProductCard = createAction('data/getProductCard', (data) => ({
   payload: data
 }));
+
+export const setProductCard = createAction('data/setProductCard', (data) => ({
+  payload: data
+}));
+
+export const setProductImage = createAction('data/setProductImage', (data) => ({
+  payload: data
+}));

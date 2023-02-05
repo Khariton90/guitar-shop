@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchProductsAction } from "../../store/api-actions";
 
 export function MainPage(): JSX.Element {
+  const dispatch = useAppDispatch();
   const products = useAppSelector(({ dataReducer }) => dataReducer.products);
   const [modal, setModal] = useState(false);
   const showModal = (value: boolean) => {
@@ -18,6 +20,8 @@ export function MainPage(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    dispatch(fetchProductsAction());
+    
     if (modal) {
       document.body.addEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = 'hidden';
@@ -27,7 +31,7 @@ export function MainPage(): JSX.Element {
       document.body.removeEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = '';
     }
-  }, [keyPressCloseModal, modal])
+  }, [dispatch, keyPressCloseModal, modal])
 
 
   return (

@@ -20,7 +20,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   // @UseGuards(JwtAuthGuard)
-  @Post('/')
+  @Post('/create')
   async create(@Body() dto: CreateProductDto, @Req() { user }: ExtendedUserRequest) {
     const product = await this.productsService.create(dto);
     return fillObject(ResponseProductDto, product);

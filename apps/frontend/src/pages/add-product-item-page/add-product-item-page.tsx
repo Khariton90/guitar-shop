@@ -1,36 +1,67 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { ProductTypeEnum, StringEnum } from "@guitar-shop/shared-types";
 import { ProductDto } from "../../types/product.dto";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { addProduct, uploadProductImage } from "../../store/api-actions";
 import dayjs from 'dayjs';
 
 export function AddProductItemPage(): JSX.Element {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const productImage = useAppSelector(({ dataReducer }) => dataReducer.productImage);
   const [selectedFile, setSelectedFile] = useState<Blob | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
-
   const [product, setProduct] = useState<ProductDto>({
     id: '',
     title: '',
     description: '',
     date: dayjs(new Date()).toISOString(),
-    image: '',
+    image: productImage,
     type: ProductTypeEnum.Electro,
     article: '',
     strings: StringEnum.Four,
-    price: 100,
+    price: 0,
   });
 
+  const handleChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setProduct((prevProduct) => {
+      if (evt.target.name === 'strings' || evt.target.name === 'price') {
+        return {
+          ...prevProduct,
+          [evt.target.name]: parseInt(evt.target.value, 10)
+        }
+      }
 
-  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [evt.target.name]: evt.target.value
-    }))
+      if (evt.target.name === 'date') {
+        return {
+          ...prevProduct,
+          [evt.target.name]: dayjs(evt.target.value).toISOString()
+        }
+      }
+
+      return {
+        ...prevProduct,
+        [evt.target.name]: evt.target.value
+      }
+    })
   }
   const handleSubmut = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    const formData = new FormData();
+
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+      dispatch(uploadProductImage(formData));
+    }
   }
 
   useEffect(() => {
+    if (productImage) {
+      dispatch(addProduct({...product, image: productImage}));
+    }
+
     if (!selectedFile) {
       setPreview(undefined);
       return
@@ -39,11 +70,9 @@ export function AddProductItemPage(): JSX.Element {
     if (selectedFile) {
       const objectUrl = URL.createObjectURL(selectedFile)
       setPreview(objectUrl)
-
       return () => URL.revokeObjectURL(objectUrl)
     }
-
-  }, [selectedFile])
+  }, [selectedFile, product, productImage, dispatch])
 
   const handleSetPreviewImage = (evt: ChangeEvent<HTMLInputElement>) => {
     if (!evt.target.files || evt.target.files.length === 0) {
@@ -78,11 +107,11 @@ export function AddProductItemPage(): JSX.Element {
             <div className="add-item__form-left">
               <div className="edit-item-image add-item__form-image">
                 <div className="edit-item-image__image-wrap">
-                  {selectedFile && <img src={preview} alt="" />}
+                  {selectedFile && <img src={preview} alt="preview" />}
                 </div>
                 <div className="edit-item-image__btn-wrap">
                   <button className="button button--small button--black-border edit-item-image__btn">Добавить
-                    <input type="file" className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage} />
+                    <input type="file" required className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage} />
                   </button>
                   <button className="button button--small button--black-border edit-item-image__btn" onClick={handleDeleteImage}>Удалить</button>
                 </div>
@@ -96,51 +125,51 @@ export function AddProductItemPage(): JSX.Element {
                 <label htmlFor="ukulele">Укулеле</label>
               </div>
               <div className="input-radio add-item__form-radio"><span>Количество струн</span>
-                <input type="radio" id="string-qty-4" name="string-qty" value="4" defaultChecked />
+                <input type="radio" id="string-qty-4" name="strings" value={StringEnum.Four} defaultChecked onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="string-qty-4">4</label>
-                <input type="radio" id="string-qty-6" name="string-qty" value="6" />
+                <input type="radio" id="string-qty-6" name="strings" value={StringEnum.Six} onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="string-qty-6">6</label>
-                <input type="radio" id="string-qty-7" name="string-qty" value="7" />
+                <input type="radio" id="string-qty-7" name="strings" value={StringEnum.Seven} onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="string-qty-7">7</label>
-                <input type="radio" id="string-qty-12" name="string-qty" value="12" />
+                <input type="radio" id="string-qty-12" name="strings" value={StringEnum.Twelve} onChange={(evt) => handleChange(evt)}/>
                 <label htmlFor="string-qty-12">12</label>
               </div>
             </div>
             <div className="add-item__form-right">
               <div className="custom-input add-item__form-input">
                 <label><span>Дата добавления товара</span>
-                  <input type="text" name="date" value="" placeholder="Дата в формате 00.00.0000" readOnly />
+                  <input type="date" required name="date" placeholder="Дата в формате 00.00.0000" onChange={(evt) => handleChange(evt)}/>
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input">
                 <label><span>Введите наименование товара</span>
-                  <input type="text" name="title" value="" placeholder="Наименование" />
+                  <input type="text" required name="title" placeholder="Наименование" minLength={10} onChange={(evt) => handleChange(evt)}/>
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input add-item__form-input--price is-placeholder">
                 <label><span>Введите цену товара</span>
-                  <input type="text" name="price" value="" placeholder="Цена в формате 00 000" />
+                  <input type="number" required min={100} max={100000} name="price" placeholder="Цена в формате 00 000" onChange={(evt) => handleChange(evt)}/>
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input">
                 <label><span>Введите артикул товара</span>
-                  <input type="text" name="article" placeholder="Артикул товара" />
+                  <input type="text" required name="article" placeholder="Артикул товара" onChange={(evt) => handleChange(evt)}/>
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-textarea add-item__form-textarea">
                 <label><span>Введите описание товара</span>
-                  <textarea name="description" placeholder=""></textarea>
+                  <textarea name="description" placeholder="" minLength={20} onChange={(evt) => handleChange(evt)}></textarea>
                 </label>
                 <p>Заполните поле</p>
               </div>
             </div>
             <div className="add-item__form-buttons-wrap">
               <button className="button button--small add-item__form-button" type="submit">Сохранить изменения</button>
-              <button className="button button--small add-item__form-button" type="button">Вернуться к списку товаров</button>
+              <button className="button button--small add-item__form-button" type="button" onClick={() => navigate(AppRoute.Main)}>Вернуться к списку товаров</button>
             </div>
           </form>
         </div>
