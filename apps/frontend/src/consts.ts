@@ -1,7 +1,7 @@
 
 export enum AppRoute {
   Main = '/',
-  AddProduct = '/addProduct',
+  AddProduct = '/add-product',
   Product = '/product/:id',
   ProductList = '/products',
   ProductChange = '/product/change/:id',
@@ -23,4 +23,5 @@ export enum ApiRoute {
   ProductList = 'products',
   Login = 'auth',
   Register = 'users/register',
+  CommentList = 'comments'
 }

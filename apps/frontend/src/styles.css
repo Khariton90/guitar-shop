@@ -30,3 +30,19 @@
 .button__red {
   border-top: 12px solid #c90606!important;
 }
+
+.reviews__up-button {
+  z-index: 2;
+}
+
+.header__cart-count {
+  display: block;
+  border-radius: 50%;
+  background-color: #c90606;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8px;
+}

@@ -1,22 +1,51 @@
-import { FormEvent, useCallback, useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchProductsAction } from "../../store/api-actions";
+import { isFilteredCard } from "../../utils";
 import cn from 'classnames';
+
+const initialForm = {
+  priceMin: '',
+  priceMax: '',
+  acoustic: '',
+  electric: '',
+  ukulele: '',
+  fourStrings: '',
+  sixStrings: '',
+  sevenStrings: '',
+  twelveStrings: '',
+};
 
 export function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(({ dataReducer }) => dataReducer.products);
+  const productsCard = useAppSelector(({ dataReducer }) => dataReducer.products);
   const [modal, setModal] = useState(false);
-  const [submitForm, setSubmitForm] = useState({});
+  const [submitForm, setChangeForm] = useState({
+    priceMin: '',
+    priceMax: '',
+    acoustic: 'acoustic',
+    electric: 'electric',
+    ukulele: 'ukulele',
+    fourStrings: '',
+    sixStrings: '',
+    sevenStrings: '',
+    twelveStrings: '',
+  });
+
+  const handleChangeField = (evt: ChangeEvent<HTMLInputElement>) => {
+    setChangeForm((prevForm) => ({
+      ...prevForm,
+      [evt.target.name]: evt.target.value,
+    }));
+  }
+
   const [sortDirection, setSortDirection] = useState<number | null>(null);
   const [sortType, setSortType] = useState<string | null>(null);
 
-  console.log(useParams());
-
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (evt: FormEvent<HTMLFormElement | HTMLInputElement>) => {
     evt.preventDefault();
   }
 
@@ -35,8 +64,8 @@ export function MainPage(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchProductsAction({type: sortType, sort: sortDirection}));
-    
+    dispatch(fetchProductsAction({ type: sortType, sort: sortDirection }));
+
     if (modal) {
       document.body.addEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = 'hidden';
@@ -46,8 +75,12 @@ export function MainPage(): JSX.Element {
       document.body.removeEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = '';
     }
-  }, [dispatch, keyPressCloseModal, modal, sortDirection, sortType])
+  }, [dispatch, keyPressCloseModal, modal, sortDirection, sortType, submitForm])
 
+  const products = productsCard
+    .slice()
+    .filter((product) => isFilteredCard(product, submitForm))
+    .filter((product) => [submitForm.acoustic, submitForm.electric, submitForm.ukulele].includes(product.type));
 
   return (
     <>
@@ -69,49 +102,52 @@ export function MainPage(): JSX.Element {
                 <div className="catalog-filter__price-range">
                   <div className="form-input">
                     <label className="visually-hidden">Минимальная цена</label>
-                    <input type="number" placeholder="1 000" id="priceMin" name="от" />
+                    <input type="number" placeholder="1 000" id="priceMin" value={submitForm.priceMin} name="priceMin" onChange={handleChangeField} />
                   </div>
                   <div className="form-input">
                     <label className="visually-hidden">Максимальная цена</label>
-                    <input type="number" placeholder="30 000" id="priceMax" name="до" />
+                    <input type="number" placeholder="30 000" id="priceMax" value={submitForm.priceMax} name="priceMax" onChange={handleChangeField} />
                   </div>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Тип гитар</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="acoustic" name="acoustic" />
+                  <input className="visually-hidden" type="checkbox" id="acoustic" checked={Boolean(submitForm.acoustic)} value={submitForm.acoustic ? '' : "acoustic"} name="acoustic" onChange={handleChangeField} />
                   <label htmlFor="acoustic">Акустические гитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="electric" name="electric" defaultChecked />
+                  <input className="visually-hidden" type="checkbox" id="electric" checked={Boolean(submitForm.electric)} value={submitForm.electric ? '' : "electric"} name="electric" onChange={handleChangeField} />
                   <label htmlFor="electric">Электрогитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="ukulele" name="ukulele" defaultChecked />
+                  <input className="visually-hidden" type="checkbox" id="ukulele" checked={Boolean(submitForm.ukulele)} value={submitForm.ukulele ? '' : "ukulele"} name="ukulele" onChange={handleChangeField} />
                   <label htmlFor="ukulele">Укулеле</label>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Количество струн</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="4-strings" name="4-strings" defaultChecked />
-                  <label htmlFor="4-strings">4</label>
+                  <input className="visually-hidden" type="checkbox" id="4-strings" name="fourStrings" />
+                  <label htmlFor="fourStrings">4</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="6-strings" name="6-strings" defaultChecked />
-                  <label htmlFor="6-strings">6</label>
+                  <input className="visually-hidden" type="checkbox" id="6-strings" name="sixStrings" />
+                  <label htmlFor="sixStrings">6</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="7-strings" name="7-strings" />
+                  <input className="visually-hidden" type="checkbox" id="7-strings" name="sevenStrings" />
                   <label htmlFor="7-strings">7</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="12-strings" name="12-strings" disabled />
-                  <label htmlFor="12-strings">12</label>
+                  <input className="visually-hidden" type="checkbox" id="12-strings" name="twelveStrings" />
+                  <label htmlFor="twelveStrings">12</label>
                 </div>
               </fieldset>
-              <button className="catalog-filter__reset-btn button button--black-border button--medium" type="reset">Очистить</button>
+              <button 
+              className="catalog-filter__reset-btn button button--black-border button--medium" 
+              type="reset" 
+              onClick={() => setChangeForm((prev) => ({...initialForm}))}>Очистить</button>
             </form>
             <div className="catalog-sort">
               <h2 className="catalog-sort__title">Сортировать:</h2>
@@ -120,13 +156,17 @@ export function MainPage(): JSX.Element {
                 <button className="catalog-sort__type-button" aria-label="по популярности" onClick={() => handleSort('rating')}>по популярности</button>
               </div>
               <div className="catalog-sort__order">
-                <button className={cn("catalog-sort__order-button catalog-sort__order-button--up", {"button__red": sortDirection === 1})} aria-label="По возрастанию" onClick={() => setSortDirection(1)}></button>
-                <button className={cn("catalog-sort__order-button catalog-sort__order-button--down", {"button__red": sortDirection === -1})} aria-label="По убыванию" onClick={() => setSortDirection(-1)}></button>
+                <button className={cn("catalog-sort__order-button catalog-sort__order-button--up", { "button__red": sortDirection === 1 })} aria-label="По возрастанию" onClick={() => setSortDirection(1)}></button>
+                <button className={cn("catalog-sort__order-button catalog-sort__order-button--down", { "button__red": sortDirection === -1 })} aria-label="По убыванию" onClick={() => setSortDirection(-1)}></button>
               </div>
             </div>
-            <div className="cards catalog__cards">
-              {products.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
-            </div>
+            {
+              products.length ? <div className="cards catalog__cards">
+                {products.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
+              </div> : <h2>По данному запросу ничего не найдено</h2>
+            }
+
+
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
                 <li className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">1</a>

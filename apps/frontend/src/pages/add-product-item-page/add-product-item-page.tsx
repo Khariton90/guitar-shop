@@ -111,7 +111,7 @@ export function AddProductItemPage(): JSX.Element {
                 </div>
                 <div className="edit-item-image__btn-wrap">
                   <button className="button button--small button--black-border edit-item-image__btn">Добавить
-                    <input type="file" required className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage} />
+                    <input type="file" required className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage}/>
                   </button>
                   <button className="button button--small button--black-border edit-item-image__btn" onClick={handleDeleteImage}>Удалить</button>
                 </div>

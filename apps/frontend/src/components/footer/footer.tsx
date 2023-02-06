@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { AppRoute } from "../../consts";
 
 export function Footer(): JSX.Element {
   return (
@@ -5,9 +7,9 @@ export function Footer(): JSX.Element {
       <div className="container">
         <div className="footer__container">
           <div className="footer__logo-wrapper">
-            <a className="footer__logo logo" href="/">
+            <Link className="footer__logo logo" to={AppRoute.Main}>
               <img className="logo__img" width="70" height="70" src="./assets/img/svg/logo.svg" alt="Логотип" />
-            </a>
+            </Link>
             <div className="socials footer__socials">
               <ul className="socials__list">
                 <li className="socials-item"><a className="socials__link" href="https://www.skype.com/" aria-label="Мы в skype">

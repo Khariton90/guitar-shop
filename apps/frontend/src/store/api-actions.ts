@@ -1,15 +1,17 @@
+import { CommentDto } from './../types/comment.dto';
 import { ProductDto } from './../types/product.dto';
 import { ApiRoute, AppRoute, AuthStatus } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard, setProductImage, setProductCard } from './action';
+import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard, setProductImage, setProductCard, getProductComments } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
+import { ProductSort } from '../types/product-sort.type';
 
 type Id = string;
 
-export const fetchProductsAction = createAsyncThunk<void, {type: string | null, sort: number | null}, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+export const fetchProductsAction = createAsyncThunk<void, ProductSort, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchProducts',
   async ({type, sort}, {dispatch, extra: api}) => {
     const connectionString = type ? `${ApiRoute.ProductList}/?${type}=${sort}` : ApiRoute.ProductList;
@@ -62,5 +64,21 @@ export const addProduct = createAsyncThunk<void, ProductDto, {dispatch: AppDispa
     dispatch(redirectToRoute(AppRoute.Main));
     dispatch(setProductImage(''));
     dispatch(setProductCard(null));
+  },
+);
+
+export const fetchComments = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/fetchComments',
+  async (id, {dispatch, extra: api}) => {
+    const {data} = await api.get<CommentDto[]>(`${ApiRoute.CommentList}/${id}`);
+    dispatch(getProductComments(data));
+  },
+);
+
+export const addNewComment = createAsyncThunk<void, CommentDto, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/addNewComment',
+  async ({id, author, dignities, disadvantage, comment, rating }, {dispatch, extra: api}) => {
+    const {data} = await api.post<CommentDto>(`${ApiRoute.CommentList}/${id}`, {author, dignities, disadvantage, comment, rating});
+    console.log(data);
   },
 );

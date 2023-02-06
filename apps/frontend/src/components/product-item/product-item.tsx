@@ -1,5 +1,6 @@
 import { AuthStatus } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks";
+import { addToCart } from "../../store/action";
 import { getOneProduct } from "../../store/api-actions";
 import { ProductDto } from "../../types/product.dto";
 
@@ -16,7 +17,10 @@ export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Elem
     evt.preventDefault();
     if (authStatus !== AuthStatus.Auth) {
       onShowModal(true);
+      return;
     }
+
+    dispatch(addToCart(product));
   }
 
   const handleNavigate = (evt: { preventDefault: () => void; }, id: string) => {

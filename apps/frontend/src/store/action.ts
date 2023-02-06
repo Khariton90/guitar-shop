@@ -26,3 +26,11 @@ export const setProductCard = createAction('data/setProductCard', (data) => ({
 export const setProductImage = createAction('data/setProductImage', (data) => ({
   payload: data
 }));
+
+export const getProductComments = createAction('data/getProductComments', (data) => ({
+  payload: data
+}));
+
+export const addToCart = createAction('data/addToCart', (data) => ({
+  payload: data
+}));
