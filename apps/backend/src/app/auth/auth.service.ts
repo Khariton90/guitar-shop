@@ -38,8 +38,8 @@ export class AuthService {
     const refreshToken = await this.jwtService.signAsync(payload, {expiresIn: '7d'})
 
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      ...user,
+      token: accessToken,
     }
   }
 }

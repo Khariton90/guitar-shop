@@ -1,16 +1,27 @@
+import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { Injectable } from '@nestjs/common';
+import { OrdersEntity } from './orders.entity';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class OrdersService {
   constructor(private readonly ordersRepository: OrdersRepository) {}
 
+  public async find() {
+    const orders = await this.ordersRepository.find();
+    // console.log(orders);
+    // return orders;
+  }
+
   public async findById(id: string) {
     throw new Error('Method not implemented.');
   }
   
-  public async create(item: string) {
-    throw new Error('Method not implemented.');
+  public async create(dto: CreateOrderDto) {
+    const date = new Date();
+    const orderEntity = new OrdersEntity({...dto, date});
+    return await this.ordersRepository.create(orderEntity);
   }
   
   public async update(id: string, item: string) {

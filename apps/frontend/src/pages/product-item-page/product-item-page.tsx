@@ -7,6 +7,7 @@ import { getOneProduct } from "../../store/api-actions";
 import cn from 'classnames';
 import Comments from "../../components/comments/comments";
 import { addToCart } from "../../store/action";
+import { priceFormat } from "../../utils";
 
 export function ProductItemPage(): JSX.Element {
   const cartProducts = useAppSelector(({dataReducer}) => dataReducer.cart);
@@ -122,7 +123,7 @@ export function ProductItemPage(): JSX.Element {
             </div>
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-              <p className="product-container__price-info product-container__price-info--value">{productCard.price} ₽</p>
+              <p className="product-container__price-info product-container__price-info--value">{priceFormat(productCard.price)}</p>
                {
                thereIsTheBasket ? <button className="button button--green button--big product-container__button" style={{width: "100%"}}>В корзине</button> :
                <button className="button button--red button--big product-container__button" onClick={() => dispatch(addToCart({product: productCard, qty: DEFAULT_QTY}))}>Добавить в корзину</button>

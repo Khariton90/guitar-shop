@@ -1,13 +1,13 @@
+import { OrderItem } from '@guitar-shop/shared-types';
 import { Order } from "@guitar-shop/shared-types";
 
 export class OrdersEntity implements Order {
   _id?: string;
-  product: string;
-  price: number;
+  userId: string;
+  products: OrderItem[];
   quantity: number;
-  amountPrice: number;
-  amountProduct: number;
   date: Date;
+  amount: number;
   
   constructor(order: Order) {
     this.fillEntity(order);
@@ -15,11 +15,10 @@ export class OrdersEntity implements Order {
 
   public fillEntity(order: Order) {
     this._id = order._id
-    this.product = order.product
-    this.price = order.price
+    this.userId = order.userId
+    this.products = order.products
     this.quantity = order.quantity
-    this.amountPrice = order.amountPrice
-    this.amountProduct = order.amountProduct
+    this.amount = order.amount
     this.date = order.date
   }
 

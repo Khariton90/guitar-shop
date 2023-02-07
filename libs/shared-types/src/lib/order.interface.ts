@@ -1,9 +1,10 @@
+import { OrderItem } from "./order-item.interface";
+
 export interface Order {
   _id?: string;
-  product: string;
-  price: number;
+  userId: string;
+  products: any;
+  amount: number;
   quantity: number;
-  amountPrice: number;
-  amountProduct: number;
   date: Date;
 }

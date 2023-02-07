@@ -52,3 +52,7 @@
   color: #000;
   width: 100px;
 }
+
+.svg--red {
+  stroke: #c90606;
+}

@@ -10,7 +10,7 @@ export class AuthController {
 
   @Post('/')
   async verify(@Body() dto: LoginUserDto) {
-    const { _id, email, passwordHash, userRole, username } = await this.authService.authorization(dto);
-    return await this.authService.login({id: _id, email, passwordHash, userRole, username})
+    const { _id, email, userRole, username } = await this.authService.authorization(dto);
+    return await this.authService.login({id: _id, email, userRole, username})
   }
 }

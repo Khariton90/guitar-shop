@@ -1,6 +1,7 @@
 import { useAppDispatch } from "../../hooks";
 import { decrementQty, incrementQty } from "../../store/action";
 import { ProductDto } from "../../types/product.dto"
+import { priceFormat } from "../../utils";
 
 
 type CartItemProps = {
@@ -28,7 +29,7 @@ export function CartItem({product, qty, onRemoveFromCart}: CartItemProps): JSX.E
         <p className="product-info__info">{ product.article }</p>
         <p className="product-info__info">Гитара { product.strings } струнная</p>
       </div>
-      <div className="cart-item__price">{product.price} ₽</div>
+      <div className="cart-item__price">{priceFormat(product.price)}</div>
       <div className="quantity cart-item__quantity">
         <button className="quantity__button" aria-label="Уменьшить количество" onClick={() => dispatch(decrementQty(product.id))}>
           <svg width="8" height="8" aria-hidden="true">
@@ -42,7 +43,7 @@ export function CartItem({product, qty, onRemoveFromCart}: CartItemProps): JSX.E
           </svg>
         </button>
       </div>
-      <div className="cart-item__price-total">{product.price} ₽</div>
+      <div className="cart-item__price-total">{priceFormat(product.price)}</div>
     </div>
   )
 }

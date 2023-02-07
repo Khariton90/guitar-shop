@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
 import { memo } from "react";
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
 
 type CommentItemProps = {
   author: string,

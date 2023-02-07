@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { addNewComment } from '../../store/api-actions';
 import { ModalSuccessReview } from '../modal-success-review/modal-success-rewiew';
+import { CommentText, CommentСharacteristics } from "../../consts";
 
 type ModalReviewProps = {
   title: string,
@@ -45,9 +46,8 @@ export function ModalReview({ title, onClickModalClose }: ModalReviewProps): JSX
   }
 
   if (showSuccess) {
-    return <ModalSuccessReview/>
+    return <ModalSuccessReview onClickModalClose={onClickModalClose}/>
   }
-
   return (
     <div>
       <div className="modal is-active modal--review modal-for-ui-kit">
@@ -68,20 +68,43 @@ export function ModalReview({ title, onClickModalClose }: ModalReviewProps): JSX
                     <label className="rate__label" htmlFor="star-3" title="Нормально"></label>
                     <input className="visually-hidden" id="star-2" name="rating" type="radio" value="2" onChange={handleChange}/>
                     <label className="rate__label" htmlFor="star-2" title="Плохо"></label>
-                    <input className="visually-hidden" id="star-1" name="rating" type="radio" value="1" onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-1" name="rating" type="radio" value="1" defaultChecked onChange={handleChange}/>
                     <label className="rate__label" htmlFor="star-1" title="Ужасно"></label>
                     <p className="rate__message">Поставьте оценку</p>
                   </div>
                 </div>
               </div>
               <label className="form-review__label form-review__label--required" htmlFor="advantage">Достоинства</label>
-              <input className="form-review__input" id="advantage" type="text" autoComplete="off" name="dignities" onChange={handleChange}/>
+              <input className="form-review__input" 
+              required
+              minLength={CommentСharacteristics.Min}
+              maxLength={CommentСharacteristics.Max}
+              id="advantage" 
+              type="text" 
+              autoComplete="off" 
+              name="dignities"
+               onChange={handleChange}/>
               <p className="form-review__warning">Заполните поле</p>
               <label className="form-review__label form-review__label--required" htmlFor="disadv">Недостатки</label>
-              <input className="form-review__input" id="disadv" type="text" autoComplete="off" name="disadvantage"  onChange={handleChange}/>
+              <input className="form-review__input"
+              required
+              minLength={CommentСharacteristics.Min}
+              maxLength={CommentСharacteristics.Max}
+              id="disadv" 
+              type="text" 
+              autoComplete="off" 
+              name="disadvantage" 
+              onChange={handleChange}/>
               <p className="form-review__warning">Заполните поле</p>
               <label className="form-review__label form-review__label--required form-review__label--textarea" htmlFor="comment">Комментарий</label>
-              <textarea className="form-review__input form-review__input--textarea" id="comment" autoComplete="off" name="comment" onChange={handleChange}></textarea>
+              <textarea className="form-review__input form-review__input--textarea"
+              required
+              minLength={CommentText.Min}
+              maxLength={CommentText.Max}
+              id="comment"
+              autoComplete="off" 
+              name="comment" 
+              onChange={handleChange}></textarea>
               <p className="form-review__warning">Заполните поле</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>

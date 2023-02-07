@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AppRoute } from "../../consts";
+import { AppRoute, AuthStatus } from "../../consts";
+import { useAppSelector } from "../../hooks";
+import cn from 'classnames';
 
 type HeaderProps = {
   productsCountToCart: number;
@@ -8,6 +10,9 @@ type HeaderProps = {
 
 function Header({productsCountToCart}: HeaderProps): JSX.Element {
   const navigate = useNavigate();
+  const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
+  const user = useAppSelector(({userReducer}) => userReducer.user);
+  const status = authStatus === AuthStatus.Auth && "svg--red";
 
   return (
     <header className="header" id="header">
@@ -31,9 +36,9 @@ function Header({productsCountToCart}: HeaderProps): JSX.Element {
             </nav>      
             <div className="header__container"><span className="header__user-name">Имя</span>
             <Link className="header__link" to={AppRoute.Login} aria-label="Перейти в личный кабинет">
-              <svg className="header__link-icon" width="12" height="14" aria-hidden="true">
+              <svg className={cn("header__link-icon", status)} width="12" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-account"></use>
-              </svg><span className="header__link-text">Вход</span></Link>
+              </svg><span className="header__link-text">{user ? user.username : "Вход"}</span></Link>
               <Link className="header__cart-link" to={AppRoute.Cart} aria-label="Перейти в корзину">
                 <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
                   <use xlinkHref="#icon-basket"></use>

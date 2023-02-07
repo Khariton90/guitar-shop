@@ -12,8 +12,8 @@ export class ResponseUserDto {
   email: string;
 
   @Expose()
-  passwordHash: string;
+  userRole: string;
 
   @Expose()
-  userRole: string;
+  token?: string;
 }

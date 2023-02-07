@@ -26,3 +26,13 @@ export enum ApiRoute {
   Register = 'users/register',
   CommentList = 'comments'
 }
+
+export enum CommentСharacteristics {
+  Min = 50,
+  Max = 100
+}
+
+export enum CommentText {
+  Min = 5,
+  Max = 1024
+}

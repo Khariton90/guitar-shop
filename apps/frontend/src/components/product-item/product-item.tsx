@@ -4,6 +4,7 @@ import { addToCart } from "../../store/action";
 import { getOneProduct } from "../../store/api-actions";
 import { ProductDto } from "../../types/product.dto";
 import { MouseEvent } from 'react';
+import { priceFormat } from "../../utils";
 
 type ProductItemProps = {
  product: ProductDto,
@@ -55,7 +56,7 @@ export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Elem
           <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>76</p>
         </div>
         <p className="product-card__title">{product.title}</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{product.price} ₽
+        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{priceFormat(product.price)}
         </p>
       </div>
       <div className="product-card__buttons"><a className="button button--mini" href="/" onClick={(evt) => handleNavigate(evt, product.id)}>Подробнее</a>

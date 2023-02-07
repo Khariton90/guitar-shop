@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { Link } from 'react-router-dom';
 import { AppRoute } from "../../consts";
 import { removeFromCart } from "../../store/action";
+import { priceFormat } from "../../utils";
 
 export function CartPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -33,8 +34,8 @@ export function CartPage(): JSX.Element {
               products.length ?
               <div className="cart__footer">
               <div className="cart__total-info">
-                <p className="cart__total-item"><span className="cart__total-value-name">Всего:</span><span className="cart__total-value">{amount} ₽</span></p>
-                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{amount} ₽</span></p>
+                <p className="cart__total-item"><span className="cart__total-value-name">Всего:</span><span className="cart__total-value">{priceFormat(amount)}</span></p>
+                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{priceFormat(amount)}</span></p>
                 <button className="button button--red button--big cart__order-button">Оформить заказ</button>
               </div>
             </div> : null

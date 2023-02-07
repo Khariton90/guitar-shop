@@ -1,16 +1,17 @@
+import { UserDto } from './../../types/user.dto';
 import { requireAutorization } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
 import { AuthStatus } from '../../consts';
 import { setUserData } from '../action';
 
 type UserState = {
-  user: object,
+  user: UserDto | null,
   autorizationStatus: AuthStatus
 }
 
 const initialState: UserState = {
-  user: {},
-  autorizationStatus: AuthStatus.Auth
+  user: null,
+  autorizationStatus: AuthStatus.Unknown
 };
 
 const userReducer = createReducer(initialState, (builder) => {

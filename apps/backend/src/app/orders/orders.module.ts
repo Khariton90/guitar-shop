@@ -1,3 +1,4 @@
+import { ProductsModel, ProductSchema } from './../products/products.model';
 import { OrdersController } from './orders.controller';
 import { OrdersModel, OrdersSchema } from './orders.model';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,7 +9,8 @@ import { OrdersRepository } from './orders.repository';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: OrdersModel.name, schema: OrdersSchema }
+      { name: OrdersModel.name, schema: OrdersSchema },
+      { name: ProductsModel.name, schema: ProductSchema },
     ])
   ],
   providers: [OrdersService, OrdersRepository],

@@ -16,6 +16,10 @@ export enum Price {
   Max = 1000000
 }
 
+export const priceFormat = (price: number | string) => {
+  return Number(price).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB'});
+}
+
 export const isFilteredCard = (product: ProductDto, form: FilterForm) => {
   const { price } = product;
 

@@ -1,11 +1,14 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useLayoutEffect, useState } from "react"
 import { NavLink } from "react-router-dom";
-import { AppRoute } from "../../consts";
-import { useAppDispatch } from "../../hooks";
+import { AppRoute, AuthStatus } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { redirectToRoute } from "../../store/action";
 import { loginAction } from "../../store/api-actions";
 
 export function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
+  const [showPass, setShowPass] = useState(false);
 
   const [submitForm, setSubmitForm] = useState({
     email: '',
@@ -24,8 +27,12 @@ export function LoginPage(): JSX.Element {
 
     dispatch(loginAction(submitForm));
   };
-
   
+  useLayoutEffect(() => {
+    if (authStatus === AuthStatus.Auth) {
+      dispatch(redirectToRoute(AppRoute.Main))
+    }
+  }, [authStatus, dispatch]);
 
   return (
     <main className="page-content">
@@ -41,7 +48,7 @@ export function LoginPage(): JSX.Element {
             </div>
             <div className="input-login">
               <label htmlFor="passwordLogin">Введите пароль</label><span>
-                <input type="password" placeholder="• • • • • • • • • • • •" 
+                <input type={showPass ?  "text" : "password"} placeholder="• • • • • • • • • • • •" 
                 id="passwordLogin" 
                 name="password" 
                 autoComplete="off" 
@@ -50,7 +57,7 @@ export function LoginPage(): JSX.Element {
                 maxLength={12}
                 onChange={handleChangeInputValue}
                 />
-                <button className="input-login__button-eye" type="button">
+                <button className="input-login__button-eye" type="button" onClick={() => setShowPass(!showPass)}>
                   <svg width="14" height="8" aria-hidden="true">
                     <use xlinkHref="#icon-eye"></use>
                   </svg>
