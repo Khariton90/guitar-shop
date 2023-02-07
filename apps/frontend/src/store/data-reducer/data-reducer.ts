@@ -1,14 +1,21 @@
+import { DEFAULT_QTY } from './../../consts';
 import { CommentDto } from './../../types/comment.dto';
 import { ProductDto } from './../../types/product.dto';
-import { loadProducts, getProductCard, setProductImage, setProductCard, getProductComments, addToCart } from './../action';
+import { loadProducts, getProductCard, setProductImage, setProductCard, getProductComments, addToCart, setLoadedStatus, addNewComment, incrementQty, decrementQty, removeFromCart } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
+
+type CartProductItem = {
+  product: ProductDto,
+  qty: number;
+}
 
 type DataState = {
   products: ProductDto[],
   productCard: ProductDto | null,
   productImage: string,
   comments: CommentDto[],
-  cart: ProductDto[],
+  cart: CartProductItem[],
+  loadedStatus: boolean
 }
 
 const initialState: DataState = {
@@ -16,9 +23,9 @@ const initialState: DataState = {
   productCard: null,
   productImage: '',
   comments: [],
-  cart: []
+  cart: [],
+  loadedStatus: false
 }
-
 
 const dataReducer = createReducer(initialState, (builder) => {
   builder.addCase(loadProducts, (state, action) => {
@@ -32,7 +39,29 @@ const dataReducer = createReducer(initialState, (builder) => {
   }).addCase(getProductComments, (state, action) => {
     state.comments = action.payload;
   }).addCase(addToCart, (state, action) => {
-    state.cart.push({...action.payload})
+    if (action.payload) {
+      state.cart.push({ ...action.payload })
+    } else {
+      state.cart = [];
+    }
+  }).addCase(setLoadedStatus, (state, action) => {
+    state.loadedStatus = action.payload;
+  }).addCase(incrementQty, (state, action) => {
+    state.cart.forEach((item) => {
+      if (item.product.id === action.payload) {
+        item.qty += DEFAULT_QTY;
+      }
+    });
+  }).addCase(decrementQty, (state, action) => {
+    state.cart.forEach((item) => {
+      if (item.product.id === action.payload && item.qty > 1) {
+        item.qty -= DEFAULT_QTY;
+      }
+    });
+  }).addCase(removeFromCart, (state, action) => {
+    state.cart = state.cart.filter((item) => item.product.id !== action.payload);
+  }).addCase(addNewComment, (state, action) => {
+    state.comments.push(action.payload);
   })
 });
 

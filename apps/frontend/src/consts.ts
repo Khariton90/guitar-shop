@@ -1,3 +1,4 @@
+export const DEFAULT_QTY = 1;
 
 export enum AppRoute {
   Main = '/',

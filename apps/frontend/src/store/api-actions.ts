@@ -4,7 +4,7 @@ import { ApiRoute, AppRoute, AuthStatus } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard, setProductImage, setProductCard, getProductComments } from './action';
+import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
 import { ProductSort } from '../types/product-sort.type';
@@ -79,6 +79,8 @@ export const addNewComment = createAsyncThunk<void, CommentDto, {dispatch: AppDi
   'data/addNewComment',
   async ({id, author, dignities, disadvantage, comment, rating }, {dispatch, extra: api}) => {
     const {data} = await api.post<CommentDto>(`${ApiRoute.CommentList}/${id}`, {author, dignities, disadvantage, comment, rating});
-    console.log(data);
+    dispatch(setLoadedStatus(true));
+    dispatch(addNewComment(data));
+    dispatch(setLoadedStatus(false));
   },
 );

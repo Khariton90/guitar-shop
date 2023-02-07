@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom"
-import { AppRoute } from "../../consts"
+import { AppRoute, DEFAULT_QTY } from "../../consts"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { ModalReview } from "../../components/modal-review/modal-review";
 import { getOneProduct } from "../../store/api-actions";
 import cn from 'classnames';
 import Comments from "../../components/comments/comments";
+import { addToCart } from "../../store/action";
 
 export function ProductItemPage(): JSX.Element {
+  const cartProducts = useAppSelector(({dataReducer}) => dataReducer.cart);
   const productCard = useAppSelector(({ dataReducer }) => dataReducer.productCard);
   const comments = useAppSelector(({ dataReducer }) => dataReducer.comments);
   const dispatch = useAppDispatch();
@@ -50,9 +52,12 @@ export function ProductItemPage(): JSX.Element {
     }
   }, [comments.length, dispatch, keyPressCloseModal, params.id, productCard, showModal]);
 
+
   if (!productCard) {
     return <div>Загрузка...</div>
   }
+
+  const thereIsTheBasket = cartProducts.length && cartProducts.some((item) => item.product.id === productCard.id);
 
   return (
     <>
@@ -118,7 +123,10 @@ export function ProductItemPage(): JSX.Element {
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
               <p className="product-container__price-info product-container__price-info--value">{productCard.price} ₽</p>
-              <a className="button button--red button--big product-container__button" href="/">Добавить в корзину</a>
+               {
+               thereIsTheBasket ? <button className="button button--green button--big product-container__button" style={{width: "100%"}}>В корзине</button> :
+               <button className="button button--red button--big product-container__button" onClick={() => dispatch(addToCart({product: productCard, qty: DEFAULT_QTY}))}>Добавить в корзину</button>
+               } 
             </div>
           </div>
           <Comments id={params.id} onShowModal={onShowModal}/>

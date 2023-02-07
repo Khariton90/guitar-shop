@@ -144,10 +144,10 @@ export function MainPage(): JSX.Element {
                   <label htmlFor="twelveStrings">12</label>
                 </div>
               </fieldset>
-              <button 
-              className="catalog-filter__reset-btn button button--black-border button--medium" 
-              type="reset" 
-              onClick={() => setChangeForm((prev) => ({...initialForm}))}>Очистить</button>
+              <button
+                className="catalog-filter__reset-btn button button--black-border button--medium"
+                type="reset"
+                onClick={() => setChangeForm((prev) => ({ ...initialForm }))}>Очистить</button>
             </form>
             <div className="catalog-sort">
               <h2 className="catalog-sort__title">Сортировать:</h2>
@@ -161,12 +161,12 @@ export function MainPage(): JSX.Element {
               </div>
             </div>
             {
-              products.length ? <div className="cards catalog__cards">
-                {products.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
-              </div> : <h2>По данному запросу ничего не найдено</h2>
+              products.length ?
+                <div className="cards catalog__cards">
+                  {products.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
+                </div> :
+                <h2>По данному запросу ничего не найдено</h2>
             }
-
-
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
                 <li className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">1</a>

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppRoute } from "../../consts";
 
@@ -5,7 +6,7 @@ type HeaderProps = {
   productsCountToCart: number;
 }
 
-export function Header({productsCountToCart}: HeaderProps): JSX.Element {
+function Header({productsCountToCart}: HeaderProps): JSX.Element {
   const navigate = useNavigate();
 
   return (
@@ -43,3 +44,5 @@ export function Header({productsCountToCart}: HeaderProps): JSX.Element {
       </header>
   );
 }
+
+export default memo(Header);

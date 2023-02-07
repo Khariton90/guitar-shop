@@ -37,7 +37,7 @@ function CommentItem(commentItem: CommentItemProps): JSX.Element {
         </svg>
         <svg width="16" height="16" aria-hidden="true">
           <use xlinkHref="#icon-star"></use>
-        </svg>
+        </svg> 
         <p className="visually-hidden">Оценка: Хорошо</p>
       </div>
       <h4 className="review__title title title--lesser">Достоинства:</h4>

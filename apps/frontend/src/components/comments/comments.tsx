@@ -1,4 +1,4 @@
-import { useEffect , MouseEvent, memo } from "react";
+import { useEffect, MouseEvent, memo } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchComments } from "../../store/api-actions";
 import CommentItem from "../comment-item/comment-item";
@@ -10,7 +10,7 @@ type CommentsProps = {
 
 function Comments({ id, onShowModal }: CommentsProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const comments = useAppSelector(({dataReducer}) => dataReducer.comments);
+  const comments = useAppSelector(({ dataReducer }) => dataReducer.comments);
 
   const handleScroll = (evt: MouseEvent) => {
     evt.preventDefault();
@@ -18,21 +18,22 @@ function Comments({ id, onShowModal }: CommentsProps): JSX.Element {
   }
 
   useEffect(() => {
-    if (id && !comments.length) {
+    if (id) {
       dispatch(fetchComments(id))
     }
-  }, [comments, dispatch, id])
-
-  if (!comments.length) {
-    return <div>Загрузка...</div>
-  }
+  }, [dispatch, id])
 
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
       <button className="button button--red-border button--big reviews__sumbit-button" onClick={onShowModal}>Оставить отзыв</button>
-      { comments.map((comment) => <CommentItem {...comment} key={comment.id}/>) }
-      <button className="button button--medium reviews__more-button">Показать еще отзывы</button>
+      {comments.length ?
+        <>
+          {comments.map((comment) => <CommentItem {...comment} key={comment.id} />)}
+          <button className="button button--medium reviews__more-button">Показать еще отзывы</button>
+        </> :
+        <p>Коментариев пока нет.</p>
+      }
       <a className="button button--up button--red-border button--big reviews__up-button" href="#header" onClick={handleScroll}>Наверх</a>
     </section>
   )

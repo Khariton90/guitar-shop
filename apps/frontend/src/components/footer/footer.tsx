@@ -1,7 +1,9 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { AppRoute } from "../../consts";
 
-export function Footer(): JSX.Element {
+
+function Footer(): JSX.Element {
   return (
     <footer className="footer">
       <div className="container">
@@ -58,3 +60,6 @@ export function Footer(): JSX.Element {
     </footer>
   );
 }
+
+
+export default memo(Footer);

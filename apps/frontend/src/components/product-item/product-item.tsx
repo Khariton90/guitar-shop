@@ -1,8 +1,9 @@
-import { AuthStatus } from "../../consts";
+import { AuthStatus, DEFAULT_QTY } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { addToCart } from "../../store/action";
 import { getOneProduct } from "../../store/api-actions";
 import { ProductDto } from "../../types/product.dto";
+import { MouseEvent } from 'react';
 
 type ProductItemProps = {
  product: ProductDto,
@@ -11,22 +12,24 @@ type ProductItemProps = {
 
 export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Element {
   const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
-
+  const cartProducts = useAppSelector(({dataReducer}) => dataReducer.cart);
   const dispatch = useAppDispatch();
-  const handleClick = (evt: { preventDefault: () => void; }) => {
+
+  const handleClick = (evt: MouseEvent) => {
     evt.preventDefault();
     if (authStatus !== AuthStatus.Auth) {
       onShowModal(true);
       return;
     }
-
-    dispatch(addToCart(product));
+    dispatch(addToCart({product: product, qty: DEFAULT_QTY}));
   }
 
-  const handleNavigate = (evt: { preventDefault: () => void; }, id: string) => {
+  const handleNavigate = (evt: MouseEvent, id: string) => {
     evt.preventDefault();
     dispatch(getOneProduct(id));
   };
+
+  const isCart = cartProducts.some((item) => item.product.id === product.id);
 
   return (
     <div className="product-card">
@@ -56,7 +59,9 @@ export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Elem
         </p>
       </div>
       <div className="product-card__buttons"><a className="button button--mini" href="/" onClick={(evt) => handleNavigate(evt, product.id)}>Подробнее</a>
-        <a className="button button--red button--mini button--add-to-cart" href="/"  role="button" onClick={handleClick}>Купить</a>
+        { isCart ? <button className="button button--green button--mini">В корзине</button> :
+        <button className="button button--red button--mini button--add-to-cart" onClick={handleClick}>Купить</button>
+        }
       </div>
     </div>
   );

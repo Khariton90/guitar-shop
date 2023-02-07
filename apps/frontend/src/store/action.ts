@@ -34,3 +34,23 @@ export const getProductComments = createAction('data/getProductComments', (data)
 export const addToCart = createAction('data/addToCart', (data) => ({
   payload: data
 }));
+
+export const removeFromCart = createAction('data/removeFromCart', (data) => ({
+  payload: data
+}));
+
+export const setLoadedStatus = createAction('data/setLoadedStatus', (data: boolean) => ({
+  payload: data
+}));
+
+export const addNewComment = createAction('data/addNewComment', (data) => ({
+  payload: data
+}));
+
+export const incrementQty = createAction('data/incrementQty', (data) => ({
+  payload: data
+}));
+
+export const decrementQty = createAction('data/decrementQty', (data) => ({
+  payload: data
+}));
