@@ -24,7 +24,8 @@ export enum ApiRoute {
   ProductList = 'products',
   Login = 'auth',
   Register = 'users/register',
-  CommentList = 'comments'
+  CommentList = 'comments',
+  DeleteProduct = 'products/delete'
 }
 
 export enum CommentСharacteristics {

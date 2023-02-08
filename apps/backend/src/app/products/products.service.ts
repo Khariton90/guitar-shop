@@ -28,4 +28,8 @@ export class ProductsService {
   async findById(id: string) {
     return await this.productsRepository.findById(id);
   }
+
+  async delete(id: string) {
+    await this.productsRepository.destroy(id);
+  }
 }

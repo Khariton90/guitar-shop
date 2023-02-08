@@ -32,7 +32,6 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
     }
     
   }
-  
 
   public async findById(id: string): Promise<Product> {
     const existProduct = this.productsModel.findById(id);

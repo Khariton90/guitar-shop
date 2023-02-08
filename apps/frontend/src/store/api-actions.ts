@@ -67,6 +67,14 @@ export const addProduct = createAsyncThunk<void, ProductDto, {dispatch: AppDispa
   },
 );
 
+export const deleteProduct = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/deleteProduct',
+  async (id, {dispatch, extra: api}) => {
+    await api.delete<void>(`${ApiRoute.DeleteProduct}/${id}`);
+  },
+);
+
+
 export const fetchComments = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchComments',
   async (id, {dispatch, extra: api}) => {
