@@ -26,7 +26,8 @@ export enum ApiRoute {
   Register = 'users/register',
   CommentList = 'comments',
   DeleteProduct = 'products/delete',
-  CreateOrder = 'orders/create'
+  CreateOrder = 'orders/create',
+  OrderList = 'orders'
 }
 
 export enum CommentСharacteristics {

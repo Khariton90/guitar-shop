@@ -14,23 +14,8 @@ export class OrdersRepository implements CRUDRepository<OrdersEntity, string, Or
   ) { }
   
   public async find() {
-    //  const orders = await this.productsModel.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: 'products',
-    //       let: { productId: '$_id' },
-    //       pipeline: [
-    //         { $match: { $expr: { $in: ['$$productId', '$products'] } } },
-    //       ],
-    //       as: 'orders'
-    //     }
-    //   }
-    // ]).exec()
-
-    // console.log(orders);
-
-    // return orders
-    // return this.ordersModel.find().populate({path: 'products', select: ['title'], model: this.productsModel})
+    const orders = await this.ordersModel.find({});
+    return orders;
   }
 
   public async findById(id: string): Promise<Order> {
@@ -47,6 +32,6 @@ export class OrdersRepository implements CRUDRepository<OrdersEntity, string, Or
   }
   
   public async destroy(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.ordersModel.findByIdAndDelete(id);
   }
 }

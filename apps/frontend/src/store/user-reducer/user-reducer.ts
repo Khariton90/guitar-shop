@@ -11,7 +11,7 @@ type UserState = {
 
 const initialState: UserState = {
   user: null,
-  autorizationStatus: AuthStatus.Unknown
+  autorizationStatus: AuthStatus.Auth
 };
 
 const userReducer = createReducer(initialState, (builder) => {

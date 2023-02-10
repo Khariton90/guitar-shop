@@ -2,7 +2,6 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { Injectable } from '@nestjs/common';
 import { OrdersEntity } from './orders.entity';
-import dayjs from 'dayjs';
 
 @Injectable()
 export class OrdersService {
@@ -10,8 +9,7 @@ export class OrdersService {
 
   public async find() {
     const orders = await this.ordersRepository.find();
-    // console.log(orders);
-    // return orders;
+    return orders;
   }
 
   public async findById(id: string) {
@@ -28,6 +26,6 @@ export class OrdersService {
   }
   
   public async destroy(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.ordersRepository.destroy(id);
   }
 }

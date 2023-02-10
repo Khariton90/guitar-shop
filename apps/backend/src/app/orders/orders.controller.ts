@@ -4,7 +4,7 @@ import { ResponseOrderDto } from './rdo/response-order.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Delete, Get, Post, Put, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Body, UseGuards, Req, Param } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
 @ApiTags('Orders')
@@ -15,8 +15,7 @@ export class OrdersController {
   @Get('/')
   public async find() {
     const orders =  await this.ordersService.find();
-    return orders;
-  // return fillObject(ResponseOrderDto, orders);
+    return fillObject(ResponseOrderDto, orders);
   }
 
   @Get('/:orderId')
@@ -38,7 +37,7 @@ export class OrdersController {
   }
   
   @Delete('/:orderId')
-  public async destroy(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  public async destroy(@Param('orderId') id: string): Promise<void> {
+    await this.ordersService.destroy(id);
   }
 }

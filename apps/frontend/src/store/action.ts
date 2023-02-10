@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { AppRoute } from '../consts';
+import { OrderRdo } from '../types/order.dto';
 
 export const redirectToRoute = createAction<AppRoute | string>('data/redirectToRoute');
 
@@ -60,5 +61,9 @@ export const decrementQty = createAction('data/decrementQty', (data) => ({
 }));
 
 export const changeFlagOrderSuccess = createAction('data/changeFlagOrderSuccess', (data) => ({
+  payload: data
+}));
+
+export const loadOrderList = createAction('order/loadOrderList', (data: OrderRdo[]) => ({
   payload: data
 }));
