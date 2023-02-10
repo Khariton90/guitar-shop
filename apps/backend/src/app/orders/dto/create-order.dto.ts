@@ -1,8 +1,9 @@
-import { Product } from '@guitar-shop/shared-types';
+import { CartProductItem } from '@guitar-shop/shared-types';
 
 export class CreateOrderDto {
   userId: string;
-  products: Product[];
+  products: CartProductItem[];
   amount: number;
   quantity: number;
+  date: Date;
 }

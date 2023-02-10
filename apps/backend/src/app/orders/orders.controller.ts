@@ -1,8 +1,10 @@
+import { ExtendedUserRequest } from '@guitar-shop/shared-types';
+import { JwtAuthGuard } from './../guards/jwt-auth.guard';
 import { ResponseOrderDto } from './rdo/response-order.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Delete, Get, Post, Put, Body } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Body, UseGuards, Req } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
 @ApiTags('Orders')
@@ -22,9 +24,10 @@ export class OrdersController {
     throw new Error('Method not implemented.');
   }
   
+  @UseGuards(JwtAuthGuard)
   @Post('/create')
-  public async create(@Body() dto: CreateOrderDto) {
-    const newOrder = await this.ordersService.create(dto);
+  public async create(@Body() dto: CreateOrderDto, @Req() req: ExtendedUserRequest) {
+    const newOrder = await this.ordersService.create({...dto, userId: req.user.sub});
 
     return newOrder;
   }

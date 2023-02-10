@@ -35,6 +35,10 @@ export const addToCart = createAction('data/addToCart', (data) => ({
   payload: data
 }));
 
+export const clearCart = createAction('data/clearCart', (data) => ({
+  payload: data
+}));
+
 export const removeFromCart = createAction('data/removeFromCart', (data) => ({
   payload: data
 }));
@@ -52,5 +56,9 @@ export const incrementQty = createAction('data/incrementQty', (data) => ({
 }));
 
 export const decrementQty = createAction('data/decrementQty', (data) => ({
+  payload: data
+}));
+
+export const changeFlagOrderSuccess = createAction('data/changeFlagOrderSuccess', (data) => ({
   payload: data
 }));

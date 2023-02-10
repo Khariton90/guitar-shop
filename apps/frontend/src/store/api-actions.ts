@@ -1,3 +1,4 @@
+import { OrderDto } from './../types/order.dto';
 import { saveToken } from './../services/token';
 import { CommentDto } from './../types/comment.dto';
 import { ProductDto } from './../types/product.dto';
@@ -5,7 +6,7 @@ import { ApiRoute, AppRoute, Id } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus } from './action';
+import { loadProducts, redirectToRoute, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus, changeFlagOrderSuccess, addToCart, clearCart } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
 import { ProductSort } from '../types/product-sort.type';
@@ -88,5 +89,15 @@ export const addNewComment = createAsyncThunk<void, CommentDto, {dispatch: AppDi
     dispatch(setLoadedStatus(true));
     dispatch(addNewComment(data));
     dispatch(setLoadedStatus(false));
+  },
+);
+
+export const addNewOrder = createAsyncThunk<void, OrderDto, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/addNewOrder',
+  async ({products, amount, quantity, date }, {dispatch, extra: api}) => {
+    await api.post<OrderDto>(`${ApiRoute.CreateOrder}`, { products, amount, quantity, date});
+    dispatch(setLoadedStatus(true));
+    dispatch(clearCart(null));
+    dispatch(changeFlagOrderSuccess(true));
   },
 );

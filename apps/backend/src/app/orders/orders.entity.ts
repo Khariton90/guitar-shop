@@ -1,10 +1,10 @@
-import { OrderItem } from '@guitar-shop/shared-types';
+import { OrderItem, CartProductItem } from '@guitar-shop/shared-types';
 import { Order } from "@guitar-shop/shared-types";
 
 export class OrdersEntity implements Order {
   _id?: string;
   userId: string;
-  products: OrderItem[];
+  products: CartProductItem[];
   quantity: number;
   date: Date;
   amount: number;

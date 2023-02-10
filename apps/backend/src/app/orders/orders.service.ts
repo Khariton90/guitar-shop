@@ -19,8 +19,7 @@ export class OrdersService {
   }
   
   public async create(dto: CreateOrderDto) {
-    const date = new Date();
-    const orderEntity = new OrdersEntity({...dto, date});
+    const orderEntity = new OrdersEntity(dto);
     return await this.ordersRepository.create(orderEntity);
   }
   

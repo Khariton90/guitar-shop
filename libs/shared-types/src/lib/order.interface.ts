@@ -1,9 +1,9 @@
-import { OrderItem } from "./order-item.interface";
+import { CartProductItem } from '@guitar-shop/shared-types';
 
 export interface Order {
   _id?: string;
   userId: string;
-  products: any;
+  products: CartProductItem[];
   amount: number;
   quantity: number;
   date: Date;

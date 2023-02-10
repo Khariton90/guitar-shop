@@ -1,7 +1,7 @@
 import { DEFAULT_QTY } from './../../consts';
 import { CommentDto } from './../../types/comment.dto';
 import { ProductDto } from './../../types/product.dto';
-import { loadProducts, getProductCard, setProductImage, setProductCard, getProductComments, addToCart, setLoadedStatus, addNewComment, incrementQty, decrementQty, removeFromCart } from './../action';
+import { loadProducts, getProductCard, setProductImage, setProductCard, getProductComments, addToCart, setLoadedStatus, addNewComment, incrementQty, decrementQty, removeFromCart, changeFlagOrderSuccess, clearCart } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
 import { CartProductItem } from '@guitar-shop/shared-types';
 
@@ -11,7 +11,8 @@ type DataState = {
   productImage: string,
   comments: CommentDto[],
   cart: CartProductItem[],
-  loadedStatus: boolean
+  loadedStatus: boolean,
+  orderSuccess: boolean
 }
 
 const initialState: DataState = {
@@ -20,7 +21,8 @@ const initialState: DataState = {
   productImage: '',
   comments: [],
   cart: [],
-  loadedStatus: false
+  loadedStatus: false,
+  orderSuccess: false
 }
 
 const dataReducer = createReducer(initialState, (builder) => {
@@ -40,6 +42,8 @@ const dataReducer = createReducer(initialState, (builder) => {
     } else {
       state.cart = [];
     }
+  }).addCase(clearCart, (state, action) => {
+      state.cart = [];
   }).addCase(setLoadedStatus, (state, action) => {
     state.loadedStatus = action.payload;
   }).addCase(incrementQty, (state, action) => {
@@ -58,6 +62,8 @@ const dataReducer = createReducer(initialState, (builder) => {
     state.cart = state.cart.filter((item) => item.product.id !== action.payload);
   }).addCase(addNewComment, (state, action) => {
     state.comments.push(action.payload);
+  }).addCase(changeFlagOrderSuccess, (state, action) => {
+    state.orderSuccess = action.payload
   })
 });
 

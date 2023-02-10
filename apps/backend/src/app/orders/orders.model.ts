@@ -1,6 +1,6 @@
-import { OrderItem } from '@guitar-shop/shared-types';
+import { CartProductItem } from '@guitar-shop/shared-types';
 import { Order } from "@guitar-shop/shared-types";
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 
 @Schema({
@@ -9,8 +9,8 @@ import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
   versionKey: false
 })
 export class OrdersModel extends Document implements Order {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'products' })
-  products: mongoose.Schema.Types.ObjectId[]
+  @Prop()
+  products: CartProductItem[]
 
   @Prop({
     required: true
