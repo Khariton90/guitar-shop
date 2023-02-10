@@ -10,8 +10,8 @@ import { addToCart } from "../../store/action";
 import { priceFormat } from "../../utils";
 
 export function ProductItemPage(): JSX.Element {
-  const cartProducts = useAppSelector(({dataReducer}) => dataReducer.cart);
-  const productCard = useAppSelector(({ dataReducer }) => dataReducer.productCard);
+  const cartProducts = useAppSelector(({ cartReducer }) => cartReducer.cart);
+  const productCard = useAppSelector(({ cartReducer }) => cartReducer.productCard);
   const comments = useAppSelector(({ dataReducer }) => dataReducer.comments);
   const dispatch = useAppDispatch();
   const params = useParams();

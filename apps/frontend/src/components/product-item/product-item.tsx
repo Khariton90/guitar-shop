@@ -14,7 +14,7 @@ type ProductItemProps = {
 
 export function ProductItem({ product, onShowModal}: ProductItemProps): JSX.Element {
   const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
-  const cartProducts = useAppSelector(({dataReducer}) => dataReducer.cart);
+  const cartProducts = useAppSelector(({ cartReducer }) => cartReducer.cart);
   const dispatch = useAppDispatch();
   const [confirmModal, setConfirmModal] = useState(false);
 

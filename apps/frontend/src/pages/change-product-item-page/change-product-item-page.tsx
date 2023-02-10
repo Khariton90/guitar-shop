@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { getOneProduct } from "../../store/api-actions";
 
 export function ChangeProductItemPage(): JSX.Element {
-  const productItem = useAppSelector(({dataReducer}) => dataReducer.productCard);
+  const productItem = useAppSelector(({ cartReducer }) => cartReducer.productCard);
   const dispatch = useAppDispatch();
   const param = useParams();
 

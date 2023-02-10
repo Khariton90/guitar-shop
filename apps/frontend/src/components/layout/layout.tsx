@@ -4,7 +4,7 @@ import Footer from "../footer/footer";
 import Header from "../header/header";
 
 export function Layout(): JSX.Element {
-  const productsCountToCart = useAppSelector(({dataReducer}) => dataReducer.cart);
+  const productsCountToCart = useAppSelector(({cartReducer}) => cartReducer.cart);
   return (
    <div className="wrapper">
     <Header productsCountToCart={productsCountToCart.length}/>

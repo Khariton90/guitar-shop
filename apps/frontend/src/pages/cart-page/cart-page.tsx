@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 export function CartPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(({dataReducer}) => dataReducer.cart);
+  const products = useAppSelector(({cartReducer}) => cartReducer.cart);
   const orderSuccess = useAppSelector(({dataReducer}) => dataReducer.orderSuccess);
   const loadedStatus = useAppSelector(({dataReducer}) => dataReducer.loadedStatus);
   const amount = products.reduce((acc, element) => element.product.price * element.qty + acc, 0);

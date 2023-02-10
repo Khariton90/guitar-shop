@@ -12,7 +12,7 @@ type CatalogItemProps = {
 
 export function CatalogItem({ cart, onShowHideCard }: CatalogItemProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const changeCard = useAppSelector(({ dataReducer }) => dataReducer.productCard);
+  const changeCard = useAppSelector(({ cartReducer }) => cartReducer.productCard);
 
   const handleClickItem = () => {
     dispatch(getProductCard(cart));

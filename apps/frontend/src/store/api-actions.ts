@@ -6,7 +6,7 @@ import { ApiRoute, AppRoute, Id } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus, changeFlagOrderSuccess, addToCart, clearCart } from './action';
+import { loadProducts, redirectToRoute, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus, changeFlagOrderSuccess, clearCart } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
 import { ProductSort } from '../types/product-sort.type';
