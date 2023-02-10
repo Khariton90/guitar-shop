@@ -1,4 +1,4 @@
-import { loadOrderList } from './../action';
+import { loadOrderList, loadOneOrder } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
 import { OrderRdo } from '../../types/order.dto';
 
@@ -15,7 +15,9 @@ const initialState: OrderState = {
 const orderReducer = createReducer(initialState, (builder) => {
   builder.addCase(loadOrderList, (state, action) => {
     state.orders = action.payload;
-  });
+  }).addCase(loadOneOrder, (state, action) => {
+    state.order = action.payload;
+  })
 });
 
 export { orderReducer };

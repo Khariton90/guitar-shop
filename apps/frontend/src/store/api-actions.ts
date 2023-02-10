@@ -16,7 +16,8 @@ import {
   getProductComments, 
   setLoadedStatus, 
   changeFlagOrderSuccess, 
-  loadOrderList 
+  loadOrderList, 
+  loadOneOrder
 } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
@@ -117,6 +118,14 @@ export const fetchOrderList = createAsyncThunk<void, number, {dispatch: AppDispa
   async (_args, {dispatch, extra: api}) => {
     const {data} = await api.get<OrderRdo[]>(`${ApiRoute.OrderList}`);
     dispatch(loadOrderList(data));
+  },
+);
+
+export const fetchOneOrder = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'order/fetchOneOrder',
+  async (id, {dispatch, extra: api}) => {
+    const {data} = await api.get<OrderRdo>(`${ApiRoute.OrderList}/${id}`);
+    dispatch(loadOneOrder(data));
   },
 );
 

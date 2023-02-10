@@ -4,6 +4,7 @@ import { Expose, Transform } from "class-transformer";
 export class ResponseOrderDto {
   @Expose()
   @Transform(({obj}) => obj._id.toString())
+  @Expose({name: '_id'})
   public id: string;
 
   @Expose()

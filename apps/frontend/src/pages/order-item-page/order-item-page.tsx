@@ -1,77 +1,87 @@
+import { CartProductItem } from "@guitar-shop/shared-types";
+import dayjs from "dayjs";
+import { useEffect } from "react"
+import { Link, useParams } from "react-router-dom";
+import { AppRoute } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { fetchOneOrder } from "../../store/api-actions";
+import { priceFormat } from "../../utils";
+
+type OrderListProductItemProps = {
+  productItem: CartProductItem
+}
+
+const OrderListProductItem = ({productItem}: OrderListProductItemProps): JSX.Element => {
+  const { product, qty } = productItem;
+
+  return (
+    <li className="order-list__item">
+      <div className="order-list__data">
+        <img src={product.image} srcSet={product.image} width="60" height="130" alt="Картинка гитары" />
+        <div className="order-list__container">
+          <p className="order-list__name">{product.title}</p>
+          <p className="order-list__lot">Артикул: {product.article}</p>
+          <p className="order-list__parameters">Электрогитара, {product.strings} струнная</p>
+        </div>
+      </div>
+      <span className="order-list__quantity">{qty}</span>
+      <span className="order-list__price">{priceFormat(product.price)}</span>
+    </li>
+  )
+}
 
 export function OrderItemPage(): JSX.Element {
+  const orderItem = useAppSelector(({ orderReducer }) => orderReducer.order);
+  const dispatch = useAppDispatch();
+  const param = useParams();
+
+  useEffect(() => {
+    if (!orderItem && param.id) {
+      dispatch(fetchOneOrder(param.id));
+    }
+  }, [dispatch, orderItem, param.id]);
+
+  if (!orderItem) {
+    return <div>Загрузка...</div>
+  }
+
   return (
     <main className="page-content">
-        <section className="order">
-          <div className="container">
-            <h1 className="order__title">Заказ № 00-000-000</h1>
-            <ul className="breadcrumbs">
-              <li className="breadcrumbs__item"><a className="link" href="./main.html">Каталог</a>
-              </li>
-              <li className="breadcrumbs__item"><a className="link" href="/"> Заказы</a>
-              </li>
-              <li className="breadcrumbs__item"><a className="link" href="/">Заказ № 00-000-000</a>
-              </li>
-            </ul>
-            <table className="order-table">
-              <tbody>
-                <tr>
-                  <td>Общее количество товаров</td>
-                  <td>4</td>
-                </tr>
-                <tr>
-                  <td>Дата заказа</td>
-                  <td>13.09.2022</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td>К оплате</td>
-                  <td>70 000 <span>₽</span></td>
-                </tr>
-              </tfoot>
-            </table>
-            <ul className="order__list order-list">
-              <li className="order-list__item">
-                <div className="order-list__data">
-                  <img src="img/content/catalog-product-1.png" srcSet="img/content/catalog-product-1@2x.png 2x" width="60" height="130" alt="Картинка гитары"/>
-                  <div className="order-list__container">
-                    <p className="order-list__name">ЭлектроГитара Честер bass</p>
-                    <p className="order-list__lot">Артикул: SO757575</p>
-                    <p className="order-list__parameters">Электрогитара, 6 струнная</p>
-                  </div>
-                </div><span className="order-list__quantity">1</span><span className="order-list__price">17 500 ₽</span>
-                <button className="order-list__button button-cross" type="button" aria-label="Закрыть"><span className="button-cross__icon"></span>
-                </button>
-              </li>
-              <li className="order-list__item">
-                <div className="order-list__data">
-                  <img src="img/content/catalog-product-1.png" srcSet="img/content/catalog-product-1@2x.png 2x" width="60" height="130" alt="Картинка гитары"/>
-                  <div className="order-list__container">
-                    <p className="order-list__name">ЭлектроГитара Честер bass</p>
-                    <p className="order-list__lot">Артикул: SO757575</p>
-                    <p className="order-list__parameters">Электрогитара, 6 струнная</p>
-                  </div>
-                </div><span className="order-list__quantity">2</span><span className="order-list__price">35 000 ₽</span>
-                <button className="order-list__button button-cross" type="button" aria-label="Закрыть"><span className="button-cross__icon"></span>
-                </button>
-              </li>
-              <li className="order-list__item">
-                <div className="order-list__data">
-                  <img src="img/content/catalog-product-1.png" srcSet="img/content/catalog-product-1@2x.png 2x" width="60" height="130" alt="Картинка гитары"/>
-                  <div className="order-list__container">
-                    <p className="order-list__name">ЭлектроГитара Честер bass</p>
-                    <p className="order-list__lot">Артикул: SO757575</p>
-                    <p className="order-list__parameters">Электрогитара, 6 струнная</p>
-                  </div>
-                </div><span className="order-list__quantity">1</span><span className="order-list__price">17 500 ₽</span>
-                <button className="order-list__button button-cross" type="button" aria-label="Закрыть"><span className="button-cross__icon"></span>
-                </button>
-              </li>
-            </ul>
-            <button className="button order__button button--small button--black-border">Вернуться к списку заказов</button>
-          </div>
-        </section>
-      </main>
+      <section className="order">
+        <div className="container">
+          <h1 className="order__title">Заказ № 00-000-000</h1>
+          <ul className="breadcrumbs">
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Каталог</Link>
+            </li>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.OrderList}> Заказы</Link>
+            </li>
+            <li className="breadcrumbs__item"><span className="link">Заказ № 00-000-000</span>
+            </li>
+          </ul>
+          <table className="order-table">
+            <tbody>
+              <tr>
+                <td>Общее количество товаров</td>
+                <td>{orderItem.products.length}</td>
+              </tr>
+              <tr>
+                <td>Дата заказа</td>
+                <td>{dayjs(orderItem.date).format('DD.MM.YYYY')}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>К оплате</td>
+                <td>{priceFormat(orderItem.amount)}</td>
+              </tr>
+            </tfoot>
+          </table>
+          <ul className="order__list order-list">
+            { orderItem.products.map((product) => <OrderListProductItem productItem={product} key={product.product.id}/>) }
+          </ul>
+          <Link className="button order__button button--small button--black-border" to={AppRoute.OrderList}>Вернуться к списку заказов</Link>
+        </div>
+      </section>
+    </main>
   )
 }

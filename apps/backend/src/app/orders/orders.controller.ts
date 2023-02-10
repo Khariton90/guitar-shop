@@ -4,7 +4,7 @@ import { ResponseOrderDto } from './rdo/response-order.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Delete, Get, Post, Put, Body, UseGuards, Req, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Body, UseGuards, Req, Param } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
 @ApiTags('Orders')
@@ -19,21 +19,16 @@ export class OrdersController {
   }
 
   @Get('/:orderId')
-  public async findById(id: string) {
-    throw new Error('Method not implemented.');
+  public async findById(@Param('orderId') id: string) {
+    const order = await this.ordersService.findById(id);
+    return fillObject(ResponseOrderDto, order);
   }
   
   @UseGuards(JwtAuthGuard)
   @Post('/create')
   public async create(@Body() dto: CreateOrderDto, @Req() req: ExtendedUserRequest) {
     const newOrder = await this.ordersService.create({...dto, userId: req.user.sub});
-
     return newOrder;
-  }
-  
-  @Put('/:orderId')
-  public async update(id: string, item: string) {
-    throw new Error('Method not implemented.');
   }
   
   @Delete('/:orderId')

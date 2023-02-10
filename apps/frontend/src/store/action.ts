@@ -67,3 +67,7 @@ export const changeFlagOrderSuccess = createAction('data/changeFlagOrderSuccess'
 export const loadOrderList = createAction('order/loadOrderList', (data: OrderRdo[]) => ({
   payload: data
 }));
+
+export const loadOneOrder = createAction('order/loadOneOrder', (data: OrderRdo) => ({
+  payload: data
+}));
