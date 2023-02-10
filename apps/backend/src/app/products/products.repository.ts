@@ -17,20 +17,17 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
 
   public async find(query: ProductsQuery): Promise<Product[] | []> {
     const sortingType = Object.entries(query);
-    const count = await this.productsModel.count();
 
     if (sortingType.length) {
-      return await this.productsModel.find()
-      .sort([...sortingType])
-      .limit(DEFAULT_LIMIT_PRODUCTS)
-      .exec();
-    } else {
-      return await this.productsModel.find()
-      .sort({date: -1})
-      .limit(DEFAULT_LIMIT_PRODUCTS)
-      .exec();
+      const products = await this.productsModel.find()
+      .sort([...sortingType]).limit(DEFAULT_LIMIT_PRODUCTS).exec();
+
+      return products;
     }
-    
+      const products = await this.productsModel.find()
+      .sort({date: -1}).limit(DEFAULT_LIMIT_PRODUCTS).exec();
+
+      return products;
   }
 
   public async findById(id: string): Promise<Product> {
@@ -49,5 +46,10 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
   
   public async destroy(id: string): Promise<void> {
     await this.productsModel.findOneAndDelete({id});
+  }
+
+  async getTotalCount(): Promise<number> {
+    const count = await this.productsModel.count();
+    return count;
   }
 }

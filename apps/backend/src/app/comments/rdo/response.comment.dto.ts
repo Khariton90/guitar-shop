@@ -1,10 +1,5 @@
 import { Expose, Transform,} from "class-transformer";
 
-export class UserRes {
-  public email: string;
-  public username: string;
-}
-
 export class ResponseCommentDto {
   @Transform(({obj}) => obj._id.toString())
   @Expose({name: '_id'})

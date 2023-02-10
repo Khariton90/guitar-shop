@@ -5,7 +5,9 @@ import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    ) {}
 
   async registration({username, email, password, userRole}: CreateUserDto) {
     if (await this.usersRepository.findByEmail(email)) {
@@ -19,7 +21,8 @@ export class UsersService {
       userRole
     }
     const userEntity = await new UsersEntity(user).setPassword(password);
-    return await this.usersRepository.create(userEntity);
+    const newUser = await this.usersRepository.create(userEntity);
+    return newUser;
   }
 
   async findById(id: string) {
@@ -34,3 +37,4 @@ export class UsersService {
     await this.usersRepository.destroy(id);
   }
 }
+

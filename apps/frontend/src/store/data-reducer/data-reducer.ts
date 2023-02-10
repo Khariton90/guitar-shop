@@ -3,11 +3,7 @@ import { CommentDto } from './../../types/comment.dto';
 import { ProductDto } from './../../types/product.dto';
 import { loadProducts, getProductCard, setProductImage, setProductCard, getProductComments, addToCart, setLoadedStatus, addNewComment, incrementQty, decrementQty, removeFromCart } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
-
-type CartProductItem = {
-  product: ProductDto,
-  qty: number;
-}
+import { CartProductItem } from '@guitar-shop/shared-types';
 
 type DataState = {
   products: ProductDto[],

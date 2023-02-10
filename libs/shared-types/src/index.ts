@@ -7,3 +7,6 @@ export * from './lib/comment.interface';
 export * from './lib/order.interface';
 export * from './lib/extended-user-request.interface';
 export * from './lib/order-item.interface';
+export * from './lib/subscriber.interface';
+export * from './lib/command-event.enum';
+export * from './lib/cart-product-item.interface';

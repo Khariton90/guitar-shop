@@ -1,23 +1,49 @@
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { AppRoute } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks"
+import { getOneProduct } from "../../store/api-actions";
 
 export function ChangeProductItemPage(): JSX.Element {
+  const productItem = useAppSelector(({dataReducer}) => dataReducer.productCard);
+  const dispatch = useAppDispatch();
+  const param = useParams();
+
+  useEffect(() => {
+    if (!productItem && param.id) {
+      dispatch(getOneProduct(param.id))
+    }
+  }, [dispatch, param.id, productItem]);
+
+  const changeProductRoute = `/product/change/${param.id}`;
+
+  if (!productItem) {
+    return <>
+    </>
+  }
+
+  
+
   return (
     <main className="page-content">
       <section className="edit-item">
         <div className="container">
-          <h1 className="edit-item__title">СURT Z30 Plus</h1>
+          <h1 className="edit-item__title">{productItem.title}</h1>
           <ul className="breadcrumbs">
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">Каталог</a>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Каталог</Link>
             </li>
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">Товары</a>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Товары</Link>
             </li>
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">СURT Z30 Plus</a>
+            <li className="breadcrumbs__item"><Link className="link" to={changeProductRoute}>{productItem.title}</Link>
             </li>
           </ul>
           <form className="edit-item__form" action="#" method="get">
             <div className="edit-item__form-left">
               <div className="edit-item-image edit-item__form-image">
                 <div className="edit-item-image__image-wrap">
-                  <img className="edit-item-image__image" src="img/content/add-item-1.png" srcSet="img/content/add-item-1@2x.png 2x" width="133" height="332" alt="СURT Z30 Plus" />
+                  <img className="edit-item-image__image" 
+                  src={productItem.image}
+                  srcSet={productItem.image} width="133" height="332" alt="СURT Z30 Plus" />
                 </div>
                 <div className="edit-item-image__btn-wrap">
                   <button className="button button--small button--black-border edit-item-image__btn">Заменить
@@ -28,13 +54,13 @@ export function ChangeProductItemPage(): JSX.Element {
               <div className="input-radio edit-item__form-radio"><span>Тип товара</span>
                 <input type="radio" id="guitar" name="item-type" value="guitar" />
                 <label htmlFor="guitar">Акустическая гитара</label>
-                <input type="radio" id="el-guitar" name="item-type" value="el-guitar" checked />
+                <input type="radio" id="el-guitar" name="item-type" value="el-guitar" defaultChecked />
                 <label htmlFor="el-guitar">Электрогитара</label>
                 <input type="radio" id="ukulele" name="item-type" value="ukulele" />
                 <label htmlFor="ukulele">Укулеле</label>
               </div>
               <div className="input-radio edit-item__form-radio"><span>Количество струн</span>
-                <input type="radio" id="string-qty-4" name="string-qty" value="4" checked />
+                <input type="radio" id="string-qty-4" name="string-qty" value="4" defaultChecked />
                 <label htmlFor="string-qty-4">4</label>
                 <input type="radio" id="string-qty-6" name="string-qty" value="6" />
                 <label htmlFor="string-qty-6">6</label>
@@ -65,14 +91,13 @@ export function ChangeProductItemPage(): JSX.Element {
               </div>
               <div className="custom-input edit-item__form-input">
                 <label><span>Артикул товара</span>
-                  <input type="text" name="sku" value="SO757575" placeholder="Артикул товара" />
+                  <input type="text" name="sku" defaultValue={productItem.article} placeholder="Артикул товара" />
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-textarea edit-item__form-textarea">
                 <label><span>Описание товара</span>
-                  <textarea name="description" placeholder="">Гитара подходит как для старта обучения, так и для домашних занятий или использования в полевых условиях, например, в походах или для проведения уличных выступлений.
-                    Доступная стоимость, качество и надежная конструкция, а также приятный внешний вид, который сделает вас звездой вечеринки.</textarea>
+                  <textarea name="description" placeholder="" defaultValue={productItem.description}></textarea>
                 </label>
                 <p>Заполните поле</p>
               </div>

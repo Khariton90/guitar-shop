@@ -39,7 +39,41 @@ export class AuthService {
 
     return {
       ...user,
+      token: refreshToken,
+    }
+  }
+
+  async refreshToken(refreshStr: string) {
+    const userSub = await this.retrieveRefreshToken(refreshStr);
+    if (!userSub) {
+      return undefined;
+    }
+
+    const user = await this.usersService.findById(userSub);
+
+    if (!user) {
+      return undefined
+    }
+
+    const payload = {
+      sub: user._id,
+      email: user.email
+    }
+
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    return {
+      ...user,
       token: accessToken,
+    }
+  }
+
+  async retrieveRefreshToken(refreshToken: string): Promise<string | undefined> {
+    try {
+      const { sub } = await this.jwtService.verifyAsync(refreshToken);
+      return sub;
+    } catch (e) {
+      return undefined;
     }
   }
 }

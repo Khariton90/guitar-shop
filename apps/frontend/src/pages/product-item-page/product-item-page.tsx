@@ -125,7 +125,7 @@ export function ProductItemPage(): JSX.Element {
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
               <p className="product-container__price-info product-container__price-info--value">{priceFormat(productCard.price)}</p>
                {
-               thereIsTheBasket ? <button className="button button--green button--big product-container__button" style={{width: "100%"}}>В корзине</button> :
+               thereIsTheBasket ? <button className="button button--red-border button--in-cart" style={{width: "100%"}}>В корзине</button> :
                <button className="button button--red button--big product-container__button" onClick={() => dispatch(addToCart({product: productCard, qty: DEFAULT_QTY}))}>Добавить в корзину</button>
                } 
             </div>

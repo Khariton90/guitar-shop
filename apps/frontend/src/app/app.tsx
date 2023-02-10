@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from '../components/layout/layout';
-import { AppRoute } from '../consts';
+import { AppRoute, AuthStatus } from '../consts';
 import { MainPage } from '../pages/main-page/main-page';
 import { LoginPage } from '../pages/login-page/login-page';
 import { ProductItemPage } from '../pages/product-item-page/product-item-page';
@@ -13,8 +13,20 @@ import { AddProductItemPage } from '../pages/add-product-item-page/add-product-i
 import { ChangeProductItemPage } from '../pages/change-product-item-page/change-product-item-page';
 import { PrivateRoute } from '../components/private-route/private-route';
 import { RegisterPage } from '../pages/register-page/register-page';
+import { useEffect } from 'react';
+import { getToken } from '../services/token';
+import { useAppDispatch } from '../hooks';
+import { requireAutorization } from '../store/action';
 
 export function App(): JSX.Element {
+  const token  = getToken();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (token) {
+      dispatch(requireAutorization(AuthStatus.Auth));
+    }
+  })
+
   return (
     <Routes>
       <Route path={AppRoute.Main} element={<Layout />}>

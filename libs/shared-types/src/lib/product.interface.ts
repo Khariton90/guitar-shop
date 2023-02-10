@@ -2,7 +2,6 @@ import { ProductTypeEnum } from "./product-type.enum";
 import { StringEnum } from "./string.enum";
 
 export interface Product {
-  _id?: string;
   title: string;
   description: string;
   date: Date;
@@ -13,4 +12,5 @@ export interface Product {
   rating: number;
   price: number;
   feeds: number;
+  id?: string;
 }

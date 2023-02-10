@@ -37,3 +37,5 @@ export enum CommentText {
   Min = 5,
   Max = 1024
 }
+
+export type Id = string;

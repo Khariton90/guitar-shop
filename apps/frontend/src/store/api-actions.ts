@@ -1,15 +1,14 @@
+import { saveToken } from './../services/token';
 import { CommentDto } from './../types/comment.dto';
 import { ProductDto } from './../types/product.dto';
-import { ApiRoute, AppRoute, AuthStatus } from './../consts';
+import { ApiRoute, AppRoute, Id } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosInstance } from 'axios';
-import { loadProducts, redirectToRoute, requireAutorization, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus } from './action';
+import { loadProducts, redirectToRoute, setUserData, getProductCard, setProductImage, setProductCard, getProductComments, setLoadedStatus } from './action';
 import { UserDto } from '../types/user.dto';
 import { AuthData, RegisterData } from '../types/auth-data';
 import { ProductSort } from '../types/product-sort.type';
-
-type Id = string;
 
 export const fetchProductsAction = createAsyncThunk<void, ProductSort, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchProducts',
@@ -24,7 +23,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {dispatch: AppDispat
   'user/login',
   async ({email, password}, {dispatch, extra: api}) => {
     const {data} = await api.post<UserDto>(ApiRoute.Login, {email, password});
-    dispatch(requireAutorization(AuthStatus.Auth));
+    saveToken(data.token);
     dispatch(setUserData(data));
     dispatch(redirectToRoute(AppRoute.Main)); 
   },
@@ -33,7 +32,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {dispatch: AppDispat
 export const registerUserAction = createAsyncThunk<void, RegisterData, {dispatch: AppDispatch,state: State,extra: AxiosInstance}>(
   'user/register',
   async ({username, email, password}, {dispatch, extra: api}) => {
-    const {data} = await api.post<UserDto>(ApiRoute.Register, {username, email, password});
+    await api.post<UserDto>(ApiRoute.Register, {username, email, password});
   
     dispatch(redirectToRoute(AppRoute.Login)); 
   },
@@ -73,7 +72,6 @@ export const deleteProduct = createAsyncThunk<void, Id, {dispatch: AppDispatch, 
     await api.delete<void>(`${ApiRoute.DeleteProduct}/${id}`);
   },
 );
-
 
 export const fetchComments = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchComments',
