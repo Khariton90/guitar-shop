@@ -1,25 +1,19 @@
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppRoute } from "../../consts";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import cn from 'classnames';
 import { logoutAction } from "../../store/api-actions";
+import { UserDto } from "../../types/user.dto";
 
 type HeaderProps = {
   productsCountToCart: number;
+  user: UserDto | null
 }
 
-function Header({productsCountToCart}: HeaderProps): JSX.Element {
+function Header({productsCountToCart, user}: HeaderProps): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useAppSelector(({userReducer}) => userReducer.user);
-  const [status, setStatus] = useState('');
-
-  useEffect(() => {
-    if (user) {
-      setStatus("svg--red");
-    }
-  }, [user])
 
   return (
     <header className="header" id="header">
@@ -42,8 +36,8 @@ function Header({productsCountToCart}: HeaderProps): JSX.Element {
               </ul>
             </nav>      
             <div className="header__container"><span className="header__user-name">{user ? user.username : null}</span>
-            <Link className="header__link" to={AppRoute.Login} aria-label="Перейти в личный кабинет">
-              <svg className={cn("header__link-icon", status)} width="12" height="14" aria-hidden="true">
+            <Link className="header__link" to={!user ? AppRoute.Login : AppRoute.Main} aria-label="Перейти в личный кабинет">
+              <svg className={cn("header__link-icon", {"svg--red": user})} width="12" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-account"></use>
               </svg>
               {

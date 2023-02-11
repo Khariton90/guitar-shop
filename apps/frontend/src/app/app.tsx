@@ -13,20 +13,20 @@ import { AddProductItemPage } from '../pages/add-product-item-page/add-product-i
 import { ChangeProductItemPage } from '../pages/change-product-item-page/change-product-item-page';
 import { PrivateRoute } from '../components/private-route/private-route';
 import { RegisterPage } from '../pages/register-page/register-page';
-import { useEffect } from 'react';
-import { getToken } from '../services/token';
 import { useAppDispatch } from '../hooks';
 import { authAction } from '../store/api-actions';
+import { getToken } from '../services/token';
+import { useEffect } from 'react';
 
 export function App(): JSX.Element {
-  const token  = getToken();
+  const token = getToken();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (token) {
-      dispatch(authAction(token));
+      dispatch(authAction(token))
     }
-  }, [dispatch, token])
+  }, [dispatch, token]);
 
   return (
     <Routes>

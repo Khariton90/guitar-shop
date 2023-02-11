@@ -37,9 +37,12 @@ export const loginAction = createAsyncThunk<void, AuthData, {dispatch: AppDispat
   'user/login',
   async ({email, password}, {dispatch, extra: api}) => {
     const {data} = await api.post(ApiRoute.Login, {email, password});
+    dispatch(setLoadedStatus(true));
     saveToken(data.refresh_token);
     dispatch(redirectToRoute(AppRoute.Main));
     dispatch(requireAutorization(AuthStatus.Auth));
+    dispatch(authAction(data.refresh_token));
+    dispatch(setLoadedStatus(false));
   },
 );
 
@@ -47,8 +50,10 @@ export const authAction = createAsyncThunk<void, string, {dispatch: AppDispatch,
   'user/authAction',
   async (refreshToken, {dispatch, extra: api}) => {
     const {data} = await api.post<UserDto>(ApiRoute.Refresh, {refreshToken});
+    dispatch(setLoadedStatus(true));
     dispatch(setUserData(data));
     dispatch(requireAutorization(AuthStatus.Auth));
+    dispatch(setLoadedStatus(false));
   },
 );
 
@@ -75,8 +80,10 @@ export const getOneProduct = createAsyncThunk<void, Id, {dispatch: AppDispatch, 
   'data/getOneProduct',
   async (id , {dispatch, extra: api}) => {
     const {data} = await api.get<ProductDto>(`${ApiRoute.ProductList}/${id}`);
+    dispatch(setLoadedStatus(true));
     dispatch(getProductCard(data));
     dispatch(redirectToRoute(`product/${id}`)); 
+    dispatch(setLoadedStatus(false));
   },
 );
 

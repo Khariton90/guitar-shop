@@ -1,17 +1,22 @@
-import { Navigate } from "react-router-dom";
-import { AppRoute, AuthStatus } from "../../consts";
+import { UserRole } from "@guitar-shop/shared-types";
 import { useAppSelector } from "../../hooks";
+import { LoginPage } from "../../pages/login-page/login-page";
+import { NotFoundPage } from "../../pages/not-found-page/not-found-page";
 
 type PrivateRouteProps = {
-  children: JSX.Element
+  children: JSX.Element,
 }
 
 export function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
-  const autorizationStatus = useAppSelector(({ userReducer }) => userReducer.autorizationStatus);
+  const user = useAppSelector(( {userReducer}) => userReducer.user);
 
-  if (autorizationStatus === AuthStatus.Auth) {
+  if (user && user.userRole === UserRole.Admin) {
     return children;
   }
 
-  return <Navigate to={AppRoute.Login} />
+  if (user && user.userRole === UserRole.User) {
+    return <NotFoundPage />
+  }
+
+  return <LoginPage />
 }
