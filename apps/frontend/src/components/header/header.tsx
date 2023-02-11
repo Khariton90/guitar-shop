@@ -1,8 +1,9 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AppRoute, AuthStatus } from "../../consts";
-import { useAppSelector } from "../../hooks";
+import { AppRoute } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import cn from 'classnames';
+import { logoutAction } from "../../store/api-actions";
 
 type HeaderProps = {
   productsCountToCart: number;
@@ -10,9 +11,15 @@ type HeaderProps = {
 
 function Header({productsCountToCart}: HeaderProps): JSX.Element {
   const navigate = useNavigate();
-  const authStatus = useAppSelector(({userReducer}) => userReducer.autorizationStatus);
+  const dispatch = useAppDispatch();
   const user = useAppSelector(({userReducer}) => userReducer.user);
-  const status = authStatus === AuthStatus.Auth && "svg--red";
+  const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setStatus("svg--red");
+    }
+  }, [user])
 
   return (
     <header className="header" id="header">
@@ -34,11 +41,17 @@ function Header({productsCountToCart}: HeaderProps): JSX.Element {
                 </li>
               </ul>
             </nav>      
-            <div className="header__container"><span className="header__user-name">Имя</span>
+            <div className="header__container"><span className="header__user-name">{user ? user.username : null}</span>
             <Link className="header__link" to={AppRoute.Login} aria-label="Перейти в личный кабинет">
               <svg className={cn("header__link-icon", status)} width="12" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-account"></use>
-              </svg><span className="header__link-text">{user ? user.username : "Вход"}</span></Link>
+              </svg>
+              {
+              user ? 
+              <span className="header__link-text" onClick={() => dispatch(logoutAction(null))}>Выйти</span> :
+              <span className="header__link-text">Вход</span>  
+              }
+              </Link>
               <Link className="header__cart-link" to={AppRoute.Cart} aria-label="Перейти в корзину">
                 <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
                   <use xlinkHref="#icon-basket"></use>

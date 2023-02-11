@@ -1,4 +1,3 @@
-import { ProductsModel } from './../products/products.model';
 import { OrdersModel } from './orders.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { OrdersEntity } from './orders.entity';
@@ -8,7 +7,6 @@ import { Model } from 'mongoose';
 export class OrdersRepository {
   constructor(
     @InjectModel(OrdersModel.name) private readonly ordersModel: Model<OrdersModel>,
-    @InjectModel(ProductsModel.name) private readonly productsModel: Model<ProductsModel>,
   ) { }
   
   public async find() {

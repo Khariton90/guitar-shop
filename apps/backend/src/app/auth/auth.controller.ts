@@ -1,8 +1,6 @@
-import { JwtAuthGuard } from './../guards/jwt-auth.guard';
-import { ExtendedUserRequest } from '@guitar-shop/shared-types';
 import { LoginUserDto } from './../users/dto/login-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Post, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Post, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
@@ -14,13 +12,19 @@ export class AuthController {
   @Post('/')
   async verify(@Body() dto: LoginUserDto) {
     const { _id, email, userRole, username } = await this.authService.authorization(dto);
-    return await this.authService.login({id: _id, email, userRole, username})
+    return await this.authService.login({id: _id, email, userRole, username});
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/refresh')
-  async refresh(@Body() dto: RefreshTokenDto, @Req() req: ExtendedUserRequest) {
-    const user = await this.authService.refreshToken(dto.refreshStr);
-    return user;
+  async refreshToken(@Body() dto: RefreshTokenDto) {
+    const { refreshToken } = dto;
+    const { id, email, userRole, username } = await this.authService.refreshToken(refreshToken);
+    return {id, email, userRole, username };
+  }
+
+  @Delete('/logout')
+  async logout(@Body() dto: RefreshTokenDto) {
+    const { refreshToken } = dto;
+    await this.authService.logout(refreshToken);
   }
 }

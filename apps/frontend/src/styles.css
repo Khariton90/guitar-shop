@@ -56,3 +56,7 @@
 .svg--red {
   stroke: #c90606;
 }
+
+.header__user-name {
+  display: block;
+}

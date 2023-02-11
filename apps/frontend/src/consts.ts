@@ -23,6 +23,8 @@ export enum AuthStatus {
 export enum ApiRoute {
   ProductList = 'products',
   Login = 'auth',
+  Refresh = 'auth/refresh',
+  Logout = 'auth/logout',
   Register = 'users/register',
   CommentList = 'comments',
   DeleteProduct = 'products/delete',

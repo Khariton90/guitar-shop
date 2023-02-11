@@ -1,7 +1,7 @@
 import { UserRole } from "@guitar-shop/shared-types";
 
 export interface UserDto {
-  id: string,
+  userId: string,
   email: string,
   userRole: UserRole,
   username: string,

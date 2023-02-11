@@ -1,3 +1,4 @@
+import { AuthRepository } from './auth.repository';
 import { ResponseUserDto } from './../users/rdo/response-user.dto';
 import { LoginUserDto } from './../users/dto/login-user.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -10,6 +11,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly authRepository: AuthRepository
     ) {}
 
   async authorization(user: LoginUserDto) {
@@ -30,17 +32,25 @@ export class AuthService {
 
   async login(user: ResponseUserDto) {
     const payload = {
-      sub: user.id,
+      sub: user.id.toString(),
       email: user.email
     }
 
     const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {expiresIn: '7d'})
+    const refreshToken = await this.jwtService.signAsync(
+      payload,
+      { expiresIn: '7d' }
+    )
+
+    await this.authRepository.create({ 
+      userId: user.id, 
+      refreshToken 
+    });
 
     return {
-      ...user,
-      token: refreshToken,
-    }
+      access_token: accessToken,
+      refresh_token: refreshToken
+    };
   }
 
   async refreshToken(refreshStr: string) {
@@ -57,15 +67,12 @@ export class AuthService {
 
     const payload = {
       sub: user._id,
-      email: user.email
+      email: user.email,
     }
 
     const accessToken = await this.jwtService.signAsync(payload);
-
-    return {
-      ...user,
-      token: accessToken,
-    }
+    const existUser = {id: user._id, email: user.email, userRole: user.userRole, username: user.username, token: accessToken };
+    return existUser;
   }
 
   async retrieveRefreshToken(refreshToken: string): Promise<string | undefined> {
@@ -75,5 +82,9 @@ export class AuthService {
     } catch (e) {
       return undefined;
     }
+  }
+
+  async logout(refreshToken: string): Promise<void> {
+    await this.authRepository.destroy(refreshToken);
   }
 }

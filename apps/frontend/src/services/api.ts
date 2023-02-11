@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { toast } from 'react-toastify';
+import { getToken } from './token';
 
 const StatusCodeMapping: Record<number, boolean> = {
   [StatusCodes.BAD_REQUEST]: true,
@@ -14,8 +15,6 @@ const AUTO_CLOSE_TOAST = 1500;
 const shouldDisplayError = (response: AxiosResponse) => !!StatusCodeMapping[response.status];
 const BASE_URL = 'http://localhost:3333/api';
 const TIMEOUT_REQUEST = 5000;
-
-const getToken = () => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2Q5NWZjYzA0NzQ2YTY2NzM5Yjc0NzkiLCJlbWFpbCI6IjFAbWFpbC5ydSIsImlhdCI6MTY3NTcyMDA0OSwiZXhwIjoxNjc2MzI0ODQ5fQ.sW-BsPUM7vUuIk2yH4hEI_2u68MptMouw5e-1f0DS40';
 
 export const createApi = (): AxiosInstance => {
   const api = axios.create({
