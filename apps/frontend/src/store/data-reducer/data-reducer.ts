@@ -1,10 +1,10 @@
 import { CommentDto } from './../../types/comment.dto';
-import { ProductDto } from './../../types/product.dto';
+import { ProductListDto } from './../../types/product.dto';
 import { loadProducts, setProductImage, getProductComments, setLoadedStatus, addNewComment, changeFlagOrderSuccess } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
 
 type DataState = {
-  products: ProductDto[],
+  products: ProductListDto,
   productImage: string,
   comments: CommentDto[],
   loadedStatus: boolean,
@@ -12,7 +12,10 @@ type DataState = {
 }
 
 const initialState: DataState = {
-  products: [],
+  products: {
+    products: [],
+    total: 0
+  },
   productImage: '',
   comments: [],
   loadedStatus: false,

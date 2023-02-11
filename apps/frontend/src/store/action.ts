@@ -1,10 +1,11 @@
+import { ProductListDto } from './../types/product.dto';
 import { createAction } from '@reduxjs/toolkit';
 import { AppRoute } from '../consts';
 import { OrderRdo } from '../types/order.dto';
 
 export const redirectToRoute = createAction<AppRoute | string>('data/redirectToRoute');
 
-export const loadProducts = createAction('data/loadProducts', (data) => ({
+export const loadProducts = createAction('data/loadProducts', (data: ProductListDto) => ({
   payload: data
 }));
 

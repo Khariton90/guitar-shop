@@ -1,7 +1,7 @@
 import { OrderDto, OrderRdo } from './../types/order.dto';
 import { saveToken, dropToken } from './../services/token';
 import { CommentDto } from './../types/comment.dto';
-import { ProductDto } from './../types/product.dto';
+import { ProductDto, ProductListDto } from './../types/product.dto';
 import { ApiRoute, AppRoute, Id, AuthStatus } from './../consts';
 import { AppDispatch, State } from './../types/state';
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -28,7 +28,7 @@ export const fetchProductsAction = createAsyncThunk<void, ProductSort, {dispatch
   'data/fetchProducts',
   async ({type, sort}, {dispatch, extra: api}) => {
     const connectionString = type ? `${ApiRoute.ProductList}/?${type}=${sort}` : ApiRoute.ProductList;
-    const { data } = await api.get<ProductDto[]>(connectionString);
+    const { data } = await api.get<ProductListDto>(connectionString);
     dispatch(loadProducts(data));
   }
 );

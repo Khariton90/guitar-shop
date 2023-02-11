@@ -43,3 +43,6 @@ export enum CommentText {
 }
 
 export type Id = string;
+
+export const TIME_OUT_DEBOUNCE = 500;
+export const PAGINATION_BUTTON_COUNT = 3;

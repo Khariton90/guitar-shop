@@ -16,16 +16,17 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
   ){}
 
   public async find(query: ProductsQuery): Promise<Product[] | []> {
-    const sortingType = Object.entries(query);
+    const pageOptions = {
+      page: query.skip > 1 ? query.skip : 0,
+      price: query.price || 1,
+      rating: query.rating || 1,
+      limit: DEFAULT_LIMIT_PRODUCTS,
+  }
 
-    if (sortingType.length) {
       const products = await this.productsModel.find()
-      .sort([...sortingType]).limit(DEFAULT_LIMIT_PRODUCTS).exec();
-
-      return products;
-    }
-      const products = await this.productsModel.find()
-      .sort({date: -1}).limit(DEFAULT_LIMIT_PRODUCTS).exec();
+      .sort([['price', pageOptions.price], ['rating', pageOptions.rating], ['date', -1]])
+      .limit(DEFAULT_LIMIT_PRODUCTS)
+      .skip(pageOptions.page * pageOptions.limit).exec();
 
       return products;
   }
@@ -48,7 +49,7 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
     await this.productsModel.findOneAndDelete({id});
   }
 
-  async getTotalCount(): Promise<number> {
+  public async getTotalCount(): Promise<number | undefined> {
     const count = await this.productsModel.count();
     return count;
   }

@@ -9,7 +9,7 @@ import { ProductDto } from "../../types/product.dto";
 
 export function ProductListPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const catalogList = useAppSelector(({dataReducer}) => dataReducer.products);
+  const {products} = useAppSelector(({dataReducer}) => dataReducer.products);
   const [showDeleteCart, setShowDeleteCart] = useState<ProductDto | null>(null);
 
   const onShowHideCard = (card: ProductDto | null) => {
@@ -97,7 +97,7 @@ export function ProductListPage(): JSX.Element {
             </div>
             <div className="catalog-cards">
               <ul className="catalog-cards__list">
-                {catalogList.map((item) => <CatalogItem
+                {products.map((item) => <CatalogItem
                   key={item.id}
                   cart={item}
                   onShowHideCard={onShowHideCard} />)}

@@ -1,5 +1,4 @@
 import { ProductsQuery } from './query/products.query';
-import { Product } from './../../../../../libs/shared-types/src/lib/product.interface';
 import { CreateProductDto } from './dto/create-product-dto';
 import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
@@ -21,8 +20,11 @@ export class ProductsService {
     return await this.productsRepository.create(productEntity);
   }
 
-  async find(query: ProductsQuery): Promise<Product[]>{
-    return await this.productsRepository.find(query);
+  async find(query: ProductsQuery) {
+    const count = await this.productsRepository.getTotalCount();
+    const products = await this.productsRepository.find(query);
+
+    return [products, count];
   }
 
   async findById(id: string) {

@@ -4,43 +4,43 @@ import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchProductsAction } from "../../store/api-actions";
-import { isFilteredCard } from "../../utils";
+import { DEFAULT, isFilteredCard, Price } from "../../utils";
 import cn from 'classnames';
+import { StringEnum } from "@guitar-shop/shared-types";
+import { ProductDto } from "../../types/product.dto";
+import { PAGINATION_BUTTON_COUNT } from "../../consts";
 
 const initialForm = {
-  priceMin: '',
-  priceMax: '',
-  acoustic: '',
-  electric: '',
-  ukulele: '',
-  fourStrings: '',
-  sixStrings: '',
-  sevenStrings: '',
-  twelveStrings: '',
+  priceMin: DEFAULT, 
+  priceMax: DEFAULT,
+  acoustic: DEFAULT,
+  electric: DEFAULT,
+  ukulele: DEFAULT,
+  fourStrings: DEFAULT,
+  sixStrings: DEFAULT,
+  sevenStrings: DEFAULT,
+  twelveStrings: DEFAULT,
 };
 
 export function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const productsCard = useAppSelector(({ dataReducer }) => dataReducer.products);
+  const { products, total } = useAppSelector(({ dataReducer }) => dataReducer.products);
   const [modal, setModal] = useState(false);
-  const [submitForm, setChangeForm] = useState({
-    priceMin: '',
-    priceMax: '',
-    acoustic: 'acoustic',
-    electric: 'electric',
-    ukulele: 'ukulele',
-    fourStrings: '',
-    sixStrings: '',
-    sevenStrings: '',
-    twelveStrings: '',
-  });
-
+  const [submitForm, setChangeForm] = useState(initialForm);
+  
   const handleChangeField = (evt: ChangeEvent<HTMLInputElement>) => {
     setChangeForm((prevForm) => ({
       ...prevForm,
-      [evt.target.name]: evt.target.value,
+      [evt.target.name]: evt.target.checked ? evt.target.value : 'DEFAULT',
     }));
-  }
+  };
+
+  const handleChangePrice = (evt: ChangeEvent<HTMLInputElement>) => {
+     setChangeForm((prevForm) => ({
+      ...prevForm,
+      [evt.target.name]: evt.target.value ? evt.target.value : 'DEFAULT',
+    }));
+  };
 
   const [sortDirection, setSortDirection] = useState<number | null>(null);
   const [sortType, setSortType] = useState<string | null>(null);
@@ -77,10 +77,9 @@ export function MainPage(): JSX.Element {
     }
   }, [dispatch, keyPressCloseModal, modal, sortDirection, sortType, submitForm])
 
-  const products = productsCard
-    .slice()
-    .filter((product) => isFilteredCard(product, submitForm))
-    .filter((product) => [submitForm.acoustic, submitForm.electric, submitForm.ukulele].includes(product.type));
+  const filteredProducts = products.filter((product: ProductDto) => isFilteredCard(product, submitForm))
+
+  const arrayOfDigits = Array.from({length: PAGINATION_BUTTON_COUNT}, (_, i) => i + 1)
 
   return (
     <>
@@ -102,46 +101,56 @@ export function MainPage(): JSX.Element {
                 <div className="catalog-filter__price-range">
                   <div className="form-input">
                     <label className="visually-hidden">Минимальная цена</label>
-                    <input type="number" placeholder="1 000" id="priceMin" value={submitForm.priceMin} name="priceMin" onChange={handleChangeField} />
+                    <input type="number" placeholder={Price.Min.toString()} id="priceMin" 
+                    defaultValue={''} min={Price.Min} name="priceMin" onChange={handleChangePrice} />
                   </div>
                   <div className="form-input">
                     <label className="visually-hidden">Максимальная цена</label>
-                    <input type="number" placeholder="30 000" id="priceMax" value={submitForm.priceMax} name="priceMax" onChange={handleChangeField} />
+                    <input type="number" max={Price.Max} placeholder={Price.Max.toString()} id="priceMax"
+                     defaultValue={""} name="priceMax" onChange={handleChangePrice} />
                   </div>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Тип гитар</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="acoustic" checked={Boolean(submitForm.acoustic)} value={submitForm.acoustic ? '' : "acoustic"} name="acoustic" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="acoustic" value={"acoustic"} name="acoustic" onChange={handleChangeField} />
                   <label htmlFor="acoustic">Акустические гитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="electric" checked={Boolean(submitForm.electric)} value={submitForm.electric ? '' : "electric"} name="electric" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="electric" value={"electric"} name="electric" onChange={handleChangeField} />
                   <label htmlFor="electric">Электрогитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="ukulele" checked={Boolean(submitForm.ukulele)} value={submitForm.ukulele ? '' : "ukulele"} name="ukulele" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="ukulele" value={"ukulele"} name="ukulele" onChange={handleChangeField} />
                   <label htmlFor="ukulele">Укулеле</label>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Количество струн</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="4-strings" name="fourStrings" />
-                  <label htmlFor="fourStrings">4</label>
+                  <input className="visually-hidden" type="checkbox" id="4-strings" 
+                  defaultValue={StringEnum.Four}
+                  name="fourStrings" onChange={handleChangeField}/>
+                  <label htmlFor="4-strings">4</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="6-strings" name="sixStrings" />
-                  <label htmlFor="sixStrings">6</label>
+                  <input className="visually-hidden" type="checkbox" id="6-strings" 
+                  defaultValue={StringEnum.Six}
+                  name="sixStrings" onChange={handleChangeField}/>
+                  <label htmlFor="6-strings">6</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="7-strings" name="sevenStrings" />
+                  <input className="visually-hidden" type="checkbox" id="7-strings" 
+                  defaultValue={StringEnum.Seven}
+                  name="sevenStrings" onChange={handleChangeField}/>
                   <label htmlFor="7-strings">7</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="12-strings" name="twelveStrings" />
-                  <label htmlFor="twelveStrings">12</label>
+                  <input className="visually-hidden" type="checkbox" id="12-strings" 
+                  defaultValue={StringEnum.Twelve}
+                  name="twelveStrings" onChange={handleChangeField}/>
+                  <label htmlFor="12-strings">12</label>
                 </div>
               </fieldset>
               <button
@@ -163,20 +172,18 @@ export function MainPage(): JSX.Element {
             {
               products.length ?
                 <div className="cards catalog__cards">
-                  {products.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
+                  {filteredProducts.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
                 </div> :
                 <h2>По данному запросу ничего не найдено</h2>
             }
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
-                <li className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">1</a>
-                </li>
-                <li className="pagination__page"><a className="link pagination__page-link" href="2">2</a>
-                </li>
-                <li className="pagination__page"><a className="link pagination__page-link" href="3">3</a>
-                </li>
-                <li className="pagination__page pagination__page--next" id="next"><a className="link pagination__page-link" href="2">Далее</a>
-                </li>
+                {
+                  arrayOfDigits
+                  .map((el) => 
+                  <li key={el} className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">{el}</a></li>)
+                }
+                <li className="pagination__page pagination__page--next" id="next"><a className="link pagination__page-link" href="2">Далее</a></li>
               </ul>
             </div>
           </div>

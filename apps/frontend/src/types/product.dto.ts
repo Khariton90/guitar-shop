@@ -13,3 +13,8 @@ export interface ProductDto {
   rating?: number;
   feeds?: number;
 }
+
+export interface ProductListDto {
+  products: ProductDto[],
+  total: number
+}

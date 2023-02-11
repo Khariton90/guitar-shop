@@ -1,3 +1,4 @@
+import { ResponseProductListDto } from './rdo/response-product-list.dto';
 import { ProductsQuery } from './query/products.query';
 import { BASE_IMAGES_URL } from './products.constant';
 import { ApiTags } from '@nestjs/swagger';
@@ -29,8 +30,8 @@ export class ProductsController {
 
   @Get('/')
   async findAll(@Query() query: ProductsQuery) {
-    const productList = await this.productsService.find(query);
-    return fillObject(ResponseProductDto, productList);
+    const [products, total] = await this.productsService.find(query);
+    return fillObject(ResponseProductListDto, {products, total});
   }
 
   @Get('/:id')
