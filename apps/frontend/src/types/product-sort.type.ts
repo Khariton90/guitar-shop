@@ -1,4 +1,6 @@
 export type ProductSort = {
-  type: string | null,
-  sort: number | null
+  page: number;
+  price: number;
+  rating: number;
+  date: number;
 }

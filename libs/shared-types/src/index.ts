@@ -11,3 +11,4 @@ export * from './lib/subscriber.interface';
 export * from './lib/command-event.enum';
 export * from './lib/cart-product-item.interface';
 export * from './lib/auth-user.interface';
+export * from './lib/sort-direction.enum';

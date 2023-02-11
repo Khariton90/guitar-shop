@@ -1,4 +1,5 @@
 import { StringEnum } from './../../../libs/shared-types/src/lib/string.enum';
+import { PAGINATION_BUTTON_COUNT, PRODUCTS_LIMIT } from './consts';
 import { ProductDto } from './types/product.dto';
 
 export const DEFAULT = 'DEFAULT';
@@ -90,5 +91,9 @@ export const isFilteredCard = (product: ProductDto, form: FilterForm) => {
   }
 
   return true;
-
 };
+
+export const getThreePagination = (total: number) => {
+  const pageCount = Math.ceil(total / PRODUCTS_LIMIT);
+  return Array.from({length: Math.min(PAGINATION_BUTTON_COUNT, pageCount)}, (_, i) => i + 1);
+} 

@@ -26,8 +26,8 @@ import { ProductSort } from '../types/product-sort.type';
 
 export const fetchProductsAction = createAsyncThunk<void, ProductSort, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/fetchProducts',
-  async ({type, sort}, {dispatch, extra: api}) => {
-    const connectionString = type ? `${ApiRoute.ProductList}/?${type}=${sort}` : ApiRoute.ProductList;
+  async ({page, rating, price, date}, {dispatch, extra: api}) => {
+    const connectionString = `${ApiRoute.ProductList}/?skip=${page}&rating=${rating}&price=${price}&date=${date}`;
     const { data } = await api.get<ProductListDto>(connectionString);
     dispatch(loadProducts(data));
   }

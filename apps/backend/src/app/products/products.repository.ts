@@ -17,14 +17,18 @@ export class ProductsRepository implements CRUDRepository<ProductsEntity, string
 
   public async find(query: ProductsQuery): Promise<Product[] | []> {
     const pageOptions = {
-      page: query.skip > 1 ? query.skip : 0,
+      page: query.skip > 1 ? query.skip - 1 : 0,
       price: query.price || 1,
       rating: query.rating || 1,
+      date: query.date || -1,
       limit: DEFAULT_LIMIT_PRODUCTS,
   }
 
       const products = await this.productsModel.find()
-      .sort([['price', pageOptions.price], ['rating', pageOptions.rating], ['date', -1]])
+      .sort([
+        ['price', pageOptions.price], 
+        ['rating', pageOptions.rating], 
+        ['date', pageOptions.date]])
       .limit(DEFAULT_LIMIT_PRODUCTS)
       .skip(pageOptions.page * pageOptions.limit).exec();
 

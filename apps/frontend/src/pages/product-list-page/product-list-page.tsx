@@ -1,3 +1,4 @@
+import { SortDirection } from "@guitar-shop/shared-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CatalogItem } from "../../components/catalog-item/catalog-item";
@@ -21,7 +22,12 @@ export function ProductListPage(): JSX.Element {
   }
 
   useEffect(() => {
-    dispatch(fetchProductsAction({ type: null, sort: null }));
+    dispatch(fetchProductsAction({ 
+      page: SortDirection.Asc, 
+      price: SortDirection.Asc, 
+      rating: SortDirection.Asc, 
+      date: SortDirection.Desc
+    }));
   }, [dispatch, showDeleteCart])
 
   const onDeleteItem = (card: ProductDto) => {
@@ -33,7 +39,10 @@ export function ProductListPage(): JSX.Element {
 
   return (
     <>
-     {showDeleteCart ? <ModalCartDelete deleteCart={showDeleteCart} onDeleteItem={onDeleteItem} onShowHideCard={onShowHideCard}/> : null} 
+     {showDeleteCart ? <ModalCartDelete 
+      deleteCart={showDeleteCart} 
+      onDeleteItem={onDeleteItem} 
+      onShowHideCard={onShowHideCard}/> : null} 
     <main className="page-content">
       <section className="product-list">
         <div className="container">

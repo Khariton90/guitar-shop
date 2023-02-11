@@ -4,14 +4,16 @@ import { ModalEnter } from "../../components/modal-enter/modal-enter";
 import { ProductItem } from "../../components/product-item/product-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchProductsAction } from "../../store/api-actions";
-import { DEFAULT, isFilteredCard, Price } from "../../utils";
-import cn from 'classnames';
-import { StringEnum } from "@guitar-shop/shared-types";
+import { DEFAULT, getThreePagination, isFilteredCard, Price } from "../../utils";
+import { SortDirection, StringEnum } from "@guitar-shop/shared-types";
 import { ProductDto } from "../../types/product.dto";
-import { PAGINATION_BUTTON_COUNT } from "../../consts";
+import { PAGINATION_BUTTON_COUNT, PRODUCTS_LIMIT } from "../../consts";
+import { ProductSort } from "../../types/product-sort.type";
+import { CatalogSortOrder } from "../../components/catalog-sort-order/catalog-sort-order";
+import cn from 'classnames';
 
 const initialForm = {
-  priceMin: DEFAULT, 
+  priceMin: DEFAULT,
   priceMax: DEFAULT,
   acoustic: DEFAULT,
   electric: DEFAULT,
@@ -27,29 +29,19 @@ export function MainPage(): JSX.Element {
   const { products, total } = useAppSelector(({ dataReducer }) => dataReducer.products);
   const [modal, setModal] = useState(false);
   const [submitForm, setChangeForm] = useState(initialForm);
-  
-  const handleChangeField = (evt: ChangeEvent<HTMLInputElement>) => {
-    setChangeForm((prevForm) => ({
-      ...prevForm,
-      [evt.target.name]: evt.target.checked ? evt.target.value : 'DEFAULT',
-    }));
-  };
-
-  const handleChangePrice = (evt: ChangeEvent<HTMLInputElement>) => {
-     setChangeForm((prevForm) => ({
-      ...prevForm,
-      [evt.target.name]: evt.target.value ? evt.target.value : 'DEFAULT',
-    }));
-  };
-
-  const [sortDirection, setSortDirection] = useState<number | null>(null);
-  const [sortType, setSortType] = useState<string | null>(null);
+  const [sortType, setSortType] = useState<keyof ProductSort & string>('date');
+  const [query, setQuery] = useState<ProductSort>({
+    price: SortDirection.Desc,
+    page: 1,
+    rating: SortDirection.Desc,
+    date: SortDirection.Desc
+  })
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement | HTMLInputElement>) => {
     evt.preventDefault();
   }
 
-  const handleSort = (value: string) => {
+  const handleSort = (value: keyof ProductSort & string) => {
     setSortType((prevType) => (prevType = value));
   }
 
@@ -63,8 +55,26 @@ export function MainPage(): JSX.Element {
     }
   }, []);
 
+  const handleChangeField = (evt: ChangeEvent<HTMLInputElement>) => {
+    setChangeForm((prevForm) => ({
+      ...prevForm,
+      [evt.target.name]: evt.target.checked ? evt.target.value : DEFAULT,
+    }));
+  };
+
+  const handleChangePrice = (evt: ChangeEvent<HTMLInputElement>) => {
+    setChangeForm((prevForm) => ({
+      ...prevForm,
+      [evt.target.name]: evt.target.value ? evt.target.value : DEFAULT,
+    }));
+  };
+
+  const onSetQuery = (key: keyof ProductSort & string, value: number) => {
+    setQuery((prev) => ({ ...prev, [key]: value }))
+  }
+
   useEffect(() => {
-    dispatch(fetchProductsAction({ type: sortType, sort: sortDirection }));
+    dispatch(fetchProductsAction(query));
 
     if (modal) {
       document.body.addEventListener('keydown', keyPressCloseModal);
@@ -75,11 +85,11 @@ export function MainPage(): JSX.Element {
       document.body.removeEventListener('keydown', keyPressCloseModal);
       document.body.style.overflow = '';
     }
-  }, [dispatch, keyPressCloseModal, modal, sortDirection, sortType, submitForm])
+  }, [dispatch, keyPressCloseModal, modal, query, submitForm])
 
-  const filteredProducts = products.filter((product: ProductDto) => isFilteredCard(product, submitForm))
-
-  const arrayOfDigits = Array.from({length: PAGINATION_BUTTON_COUNT}, (_, i) => i + 1)
+  const filteredProducts = products.filter((product: ProductDto) => isFilteredCard(product, submitForm));
+  const arrayOfDigits = getThreePagination(total);
+  const loadMoreBtn = Math.ceil(total / PRODUCTS_LIMIT) > PAGINATION_BUTTON_COUNT;
 
   return (
     <>
@@ -101,62 +111,80 @@ export function MainPage(): JSX.Element {
                 <div className="catalog-filter__price-range">
                   <div className="form-input">
                     <label className="visually-hidden">Минимальная цена</label>
-                    <input type="number" placeholder={Price.Min.toString()} id="priceMin" 
-                    defaultValue={''} min={Price.Min} name="priceMin" onChange={handleChangePrice} />
+                    <input type="number" placeholder={Price.Min.toString()} id="priceMin"
+                      defaultValue={''} min={Price.Min} name="priceMin" onChange={handleChangePrice} />
                   </div>
                   <div className="form-input">
                     <label className="visually-hidden">Максимальная цена</label>
                     <input type="number" max={Price.Max} placeholder={Price.Max.toString()} id="priceMax"
-                     defaultValue={""} name="priceMax" onChange={handleChangePrice} />
+                      defaultValue={""} name="priceMax" onChange={handleChangePrice} />
                   </div>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Тип гитар</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="acoustic" value={"acoustic"} name="acoustic" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="acoustic"
+                    defaultValue={"acoustic"}
+                    name="acoustic"
+                    checked={submitForm.acoustic !== DEFAULT}
+                    onChange={handleChangeField} />
                   <label htmlFor="acoustic">Акустические гитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="electric" value={"electric"} name="electric" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="electric"
+                    defaultValue={"electric"}
+                    name="electric"
+                    checked={submitForm.electric !== DEFAULT}
+                    onChange={handleChangeField} />
                   <label htmlFor="electric">Электрогитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="ukulele" value={"ukulele"} name="ukulele" onChange={handleChangeField} />
+                  <input className="visually-hidden" type="checkbox" id="ukulele"
+                    defaultValue={"ukulele"}
+                    name="ukulele"
+                    checked={submitForm.ukulele !== DEFAULT}
+                    onChange={handleChangeField} />
                   <label htmlFor="ukulele">Укулеле</label>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Количество струн</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="4-strings" 
-                  defaultValue={StringEnum.Four}
-                  name="fourStrings" onChange={handleChangeField}/>
+                  <input className="visually-hidden" type="checkbox" id="4-strings"
+                    defaultValue={StringEnum.Four}
+                    name="fourStrings"
+                    checked={submitForm.fourStrings !== DEFAULT}
+                    onChange={handleChangeField} />
                   <label htmlFor="4-strings">4</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="6-strings" 
-                  defaultValue={StringEnum.Six}
-                  name="sixStrings" onChange={handleChangeField}/>
+                  <input className="visually-hidden" type="checkbox" id="6-strings"
+                    defaultValue={StringEnum.Six}
+                    name="sixStrings"
+                    checked={submitForm.sixStrings !== DEFAULT}
+                    onChange={handleChangeField} />
                   <label htmlFor="6-strings">6</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="7-strings" 
-                  defaultValue={StringEnum.Seven}
-                  name="sevenStrings" onChange={handleChangeField}/>
+                  <input className="visually-hidden" type="checkbox" id="7-strings"
+                    defaultValue={StringEnum.Seven}
+                    checked={submitForm.sevenStrings !== DEFAULT}
+                    name="sevenStrings" onChange={handleChangeField} />
                   <label htmlFor="7-strings">7</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="12-strings" 
-                  defaultValue={StringEnum.Twelve}
-                  name="twelveStrings" onChange={handleChangeField}/>
+                  <input className="visually-hidden" type="checkbox" id="12-strings"
+                    defaultValue={StringEnum.Twelve}
+                    checked={submitForm.twelveStrings !== DEFAULT}
+                    name="twelveStrings" onChange={handleChangeField} />
                   <label htmlFor="12-strings">12</label>
                 </div>
               </fieldset>
               <button
                 className="catalog-filter__reset-btn button button--black-border button--medium"
                 type="reset"
-                onClick={() => setChangeForm((prev) => ({ ...initialForm }))}>Очистить</button>
+                onClick={() => setChangeForm((prev) => ({ ...prev, ...initialForm }))}>Очистить</button>
             </form>
             <div className="catalog-sort">
               <h2 className="catalog-sort__title">Сортировать:</h2>
@@ -164,13 +192,10 @@ export function MainPage(): JSX.Element {
                 <button className="catalog-sort__type-button" aria-label="по цене" onClick={() => handleSort('price')}>по цене</button>
                 <button className="catalog-sort__type-button" aria-label="по популярности" onClick={() => handleSort('rating')}>по популярности</button>
               </div>
-              <div className="catalog-sort__order">
-                <button className={cn("catalog-sort__order-button catalog-sort__order-button--up", { "button__red": sortDirection === 1 })} aria-label="По возрастанию" onClick={() => setSortDirection(1)}></button>
-                <button className={cn("catalog-sort__order-button catalog-sort__order-button--down", { "button__red": sortDirection === -1 })} aria-label="По убыванию" onClick={() => setSortDirection(-1)}></button>
-              </div>
+              <CatalogSortOrder type={sortType} onSetQuery={onSetQuery}/>
             </div>
             {
-              products.length ?
+              filteredProducts.length ?
                 <div className="cards catalog__cards">
                   {filteredProducts.map((product) => <ProductItem key={product.id} product={product} onShowModal={showModal} />)}
                 </div> :
@@ -178,12 +203,20 @@ export function MainPage(): JSX.Element {
             }
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
-                {
-                  arrayOfDigits
-                  .map((el) => 
-                  <li key={el} className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">{el}</a></li>)
+                {filteredProducts.length ?
+                  arrayOfDigits.map((el) => <li key={el} className={cn("pagination__page", {" pagination__page--active": query.page === el})} 
+                  onClick={() => onSetQuery("page", el)}>
+                    <span className="link pagination__page-link">{el}</span>
+                    </li>)
+                  : null
                 }
-                <li className="pagination__page pagination__page--next" id="next"><a className="link pagination__page-link" href="2">Далее</a></li>
+                {
+                  loadMoreBtn ?
+                    <li className="pagination__page pagination__page--next" id="next">
+                      <a className="link pagination__page-link" href="2">Далее</a>
+                    </li> : null
+                }
+
               </ul>
             </div>
           </div>

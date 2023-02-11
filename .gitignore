@@ -39,6 +39,7 @@ testem.log
 Thumbs.db
 
 markup
+public
 *.env
 
 db
