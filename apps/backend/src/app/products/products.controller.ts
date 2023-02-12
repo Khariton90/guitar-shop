@@ -2,12 +2,11 @@ import { ResponseProductListDto } from './rdo/response-product-list.dto';
 import { ProductsQuery } from './query/products.query';
 import { BASE_IMAGES_URL } from './products.constant';
 import { ApiTags } from '@nestjs/swagger';
-import { ExtendedUserRequest } from '@guitar-shop/shared-types';
 import { ResponseProductDto } from './rdo/response-product.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from './../guards/jwt-auth.guard';
-import { Body, Controller, Post, UseGuards, Req, Get, Param, Res, UploadedFile, UseInterceptors, Query, Delete } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, Param, Res, UploadedFile, UseInterceptors, Query, Delete } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -21,9 +20,9 @@ type File = Express.Multer.File;
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/create')
-  async create(@Body() dto: CreateProductDto, @Req() { user }: ExtendedUserRequest) {
+  async create(@Body() dto: CreateProductDto) {
     const product = await this.productsService.create(dto);
     return fillObject(ResponseProductDto, product);
   }
@@ -41,11 +40,11 @@ export class ProductsController {
   }
 
   @Get('images/:filename')
-  
   async getImage(@Param('filename') filename: string, @Res() res) {
     res.sendFile(filename, {root: './apps/public'});
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('images/upload')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
@@ -65,12 +64,11 @@ export class ProductsController {
     }
   }))
   async uploadImage(@UploadedFile() file: File) {
-    ///Todo реализация сервиса
     const response = `${BASE_IMAGES_URL}${file.filename}`
-
     return response;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/delete/:id')
   async delete(@Param('id') id: string) {
     await this.productsService.delete(id);

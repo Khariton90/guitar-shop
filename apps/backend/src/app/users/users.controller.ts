@@ -17,6 +17,7 @@ export class UsersController {
     return fillObject(ResponseUserDto, user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async findById(@Param('id') id: string) {
     const user = await this.usersService.findById(id);

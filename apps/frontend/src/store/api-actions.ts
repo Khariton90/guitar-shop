@@ -140,10 +140,11 @@ export const addNewOrder = createAsyncThunk<void, OrderDto, {dispatch: AppDispat
   },
 );
 
-export const fetchOrderList = createAsyncThunk<void, number, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+export const fetchOrderList = createAsyncThunk<void, ProductSort, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'order/fetchOrderList',
-  async (_args, {dispatch, extra: api}) => {
-    const {data} = await api.get<OrderRdo[]>(`${ApiRoute.OrderList}`);
+  async ({date, price, page}, {dispatch, extra: api}) => {
+    const connectionString = `${ApiRoute.OrderList}/?skip=${page}&price=${price}&date=${date}`;
+    const {data} = await api.get<OrderRdo[]>(connectionString);
     dispatch(loadOrderList(data));
   },
 );

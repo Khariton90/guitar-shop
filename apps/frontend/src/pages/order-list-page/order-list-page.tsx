@@ -1,40 +1,39 @@
-import dayjs from "dayjs";
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../hooks"
-import { deleteOrder, fetchOrderList } from "../../store/api-actions";
-import { priceFormat } from "../../utils";
-import { OrderRdo } from '../../types/order.dto';
-import { Link, useNavigate } from "react-router-dom";
+import { fetchOrderList } from "../../store/api-actions";
+import { Link } from "react-router-dom";
 import { AppRoute } from "../../consts";
-
-type OrderListItemProps = {
-  orderItem: OrderRdo
-}
-
-const OrderListItem = ({orderItem}: OrderListItemProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const handleNavigate = (id: string) => {
-    navigate(`${AppRoute.OrderList}/${id}`);
-  }
-
-  return (
-    <li className="orders__item">
-      <h3 className="orders__number" onClick={() => handleNavigate(orderItem.id)}>Заказ №00-000-000</h3><span className="orders__items">товаров&nbsp;
-      <b className="orders__items-qty">{orderItem.products.length}</b></span><span className="orders__date">{dayjs(orderItem.date).format('DD.MM.YYYY')}</span>
-      <b className="orders__sum">{ priceFormat(orderItem.amount) }<span className="orders__rouble"></span></b>
-      <button className="button button--small orders__remove-button" type="button" onClick={() => dispatch(deleteOrder(orderItem.id))}>Удалить</button>
-    </li>
-  )
-}
+import { OrderListItem } from "../../components/order-list-item/order-list-item";
+import { PageContentPagination } from "../../components/page-content-pagination/page-content-pagination";
+import { ProductSort } from "../../types/product-sort.type";
+import { SortDirection } from "@guitar-shop/shared-types";
+import cn from 'classnames';
+import { CatalogSortOrder } from "../../components/catalog-sort-order/catalog-sort-order";
 
 export function OrderListPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const orderList = useAppSelector(({ orderReducer }) => orderReducer.orders);
+  const [sortType, setSortType] = useState<keyof ProductSort & string>('price');
+  
+  const total = orderList.length;
 
+  const [query, setQuery] = useState<ProductSort>({
+    price: SortDirection.Desc,
+    page: 1,
+    date: SortDirection.Desc
+  });
+
+  const handleSort = (value: keyof ProductSort & string) => {
+    setSortType((prevType) => (prevType = value));
+  }
+
+  const onSetQuery = (key: keyof ProductSort & string, value: number) => {
+    setQuery((prev) => ({ ...prev, [key]: value }))
+  }
+  
   useEffect(() => {
-    dispatch(fetchOrderList(1));
-  }, [dispatch])
+    dispatch(fetchOrderList(query));
+  }, [dispatch, query, sortType])
 
   return (
     <main className="page-content orders__main">
@@ -50,13 +49,10 @@ export function OrderListPage(): JSX.Element {
           <div className="catalog-sort">
             <h2 className="catalog-sort__title">Сортировать:</h2>
             <div className="catalog-sort__type">
-              <button className="catalog-sort__type-button catalog-sort__type-button--active" aria-label="по дате">по дате</button>
-              <button className="catalog-sort__type-button" aria-label="по цене">по цене</button>
+              <button className={cn("catalog-sort__type-button", {"catalog-sort__type-button--active": sortType === 'date'})} aria-label="по дате" onClick={() => handleSort('date')}>по дате</button>
+              <button className={cn("catalog-sort__type-button", {"catalog-sort__type-button--active": sortType === 'price'})} aria-label="по цене" onClick={() => handleSort('price')}>по цене</button>
             </div>
-            <div className="catalog-sort__order">
-              <button className="catalog-sort__order-button catalog-sort__order-button--up" aria-label="По возрастанию"></button>
-              <button className="catalog-sort__order-button catalog-sort__order-button--down" aria-label="По убыванию"></button>
-            </div>
+            <CatalogSortOrder type={sortType} onSetQuery={onSetQuery} />
           </div>
           <ul className="orders__list">
             { orderList.length ? 
@@ -64,18 +60,7 @@ export function OrderListPage(): JSX.Element {
               <h3>Список заказов пуст</h3>  
           }
           </ul>
-          <div className="pagination orders__pagination">
-            <ul className="pagination__list">
-              <li className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">1</a>
-              </li>
-              <li className="pagination__page"><a className="link pagination__page-link" href="2">2</a>
-              </li>
-              <li className="pagination__page"><a className="link pagination__page-link" href="3">3</a>
-              </li>
-              <li className="pagination__page pagination__page--next" id="next"><a className="link pagination__page-link" href="2">Далее</a>
-              </li>
-            </ul>
-          </div>
+          <PageContentPagination total={total} query={query} onSetQuery={onSetQuery}/>
         </div>
       </section>
     </main>
