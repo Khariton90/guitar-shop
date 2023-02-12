@@ -22,4 +22,4 @@ const userReducer = createReducer(initialState, (builder) => {
   })
 });
 
-export {userReducer};
+export { userReducer };

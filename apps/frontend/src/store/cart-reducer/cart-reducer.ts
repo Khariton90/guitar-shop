@@ -1,6 +1,6 @@
 import { DEFAULT_QTY } from './../../consts';
 import { ProductDto } from './../../types/product.dto';
-import {getProductCard, setProductCard, addToCart, incrementQty, decrementQty, removeFromCart, clearCart } from './../action';
+import { getProductCard, setProductCard, addToCart, incrementQty, decrementQty, removeFromCart, clearCart } from './../action';
 import { createReducer } from '@reduxjs/toolkit';
 import { CartProductItem } from '@guitar-shop/shared-types';
 
@@ -26,7 +26,7 @@ const cartReducer = createReducer(initialState, (builder) => {
       state.cart = [];
     }
   }).addCase(clearCart, (state, action) => {
-      state.cart = [];
+    state.cart = [];
   }).addCase(incrementQty, (state, action) => {
     state.cart.forEach((item) => {
       if (item.product.id === action.payload) {

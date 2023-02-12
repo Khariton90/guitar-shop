@@ -1,4 +1,4 @@
-import { OrderItem, CartProductItem } from '@guitar-shop/shared-types';
+import { CartProductItem } from '@guitar-shop/shared-types';
 import { Order } from "@guitar-shop/shared-types";
 
 export class OrdersEntity implements Order {

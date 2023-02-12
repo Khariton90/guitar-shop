@@ -49,5 +49,3 @@ export class CommentsModel extends Document implements Comment {
 
 export const CommentsSchema = SchemaFactory.createForClass(CommentsModel);
 
-CommentsSchema.virtual
-

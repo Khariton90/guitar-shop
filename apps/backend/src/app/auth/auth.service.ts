@@ -71,7 +71,13 @@ export class AuthService {
     }
 
     const accessToken = await this.jwtService.signAsync(payload);
-    const existUser = {id: user._id, email: user.email, userRole: user.userRole, username: user.username, token: accessToken };
+    const existUser = {
+      id: user._id, 
+      email: user.email, 
+      userRole: user.userRole, 
+      username: user.username, 
+      token: accessToken 
+    };
     return existUser;
   }
 

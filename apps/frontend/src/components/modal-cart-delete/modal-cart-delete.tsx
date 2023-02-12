@@ -9,7 +9,7 @@ type ModalCartDeleteProps = {
   onDeleteItem: (card: ProductDto) => void
 }
 
-export function ModalCartDelete({deleteCart, onDeleteItem, onShowHideCard}: ModalCartDeleteProps): JSX.Element {
+export function ModalCartDelete({ deleteCart, onDeleteItem, onShowHideCard }: ModalCartDeleteProps): JSX.Element {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -32,8 +32,8 @@ export function ModalCartDelete({deleteCart, onDeleteItem, onShowHideCard}: Moda
             <div className="modal__content">
               <h2 className="modal__header title title--medium title--red">Удалить этот товар?</h2>
               <div className="modal__info">
-                <img className="modal__img" 
-                  src={deleteCart.image} 
+                <img className="modal__img"
+                  src={deleteCart.image}
                   srcSet="img/content/catalog-product-1@2x.png 2x" width="67" height="137" alt="Честер bass" />
                 <div className="modal__info-wrapper">
                   <h3 className="modal__product-name title title--little title--uppercase">{deleteCart.title}</h3>

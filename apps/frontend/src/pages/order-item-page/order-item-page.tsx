@@ -11,7 +11,7 @@ type OrderListProductItemProps = {
   productItem: CartProductItem
 }
 
-const OrderListProductItem = ({productItem}: OrderListProductItemProps): JSX.Element => {
+const OrderListProductItem = ({ productItem }: OrderListProductItemProps): JSX.Element => {
   const { product, qty } = productItem;
 
   return (
@@ -77,7 +77,7 @@ export function OrderItemPage(): JSX.Element {
             </tfoot>
           </table>
           <ul className="order__list order-list">
-            { orderItem.products.map((product) => <OrderListProductItem productItem={product} key={product.product.id}/>) }
+            {orderItem.products.map((product) => <OrderListProductItem productItem={product} key={product.product.id} />)}
           </ul>
           <Link className="button order__button button--small button--black-border" to={AppRoute.OrderList}>Вернуться к списку заказов</Link>
         </div>

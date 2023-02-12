@@ -6,7 +6,7 @@ type ModalEnterProps = {
   onShowModal: (value: boolean) => void;
 }
 
-export function ModalEnter({modal, onShowModal}: ModalEnterProps): JSX.Element {
+export function ModalEnter({ modal, onShowModal }: ModalEnterProps): JSX.Element {
 
   const closeModal = () => {
     onShowModal(false)

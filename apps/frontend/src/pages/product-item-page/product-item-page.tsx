@@ -53,7 +53,6 @@ export function ProductItemPage(): JSX.Element {
     }
   }, [comments.length, dispatch, keyPressCloseModal, params.id, productCard, showModal]);
 
-
   if (!productCard) {
     return <div>Загрузка...</div>
   }
@@ -62,7 +61,7 @@ export function ProductItemPage(): JSX.Element {
 
   return (
     <>
-      {showModal ? <ModalReview title={productCard.title}  onClickModalClose={onClickModalClose}/> : null}
+      {showModal ? <ModalReview title={productCard.title} onClickModalClose={onClickModalClose} /> : null}
       <main className="page-content">
         <div className="container">
           <h1 className="page-content__title title title--bigger">Товар</h1>
@@ -124,13 +123,13 @@ export function ProductItemPage(): JSX.Element {
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
               <p className="product-container__price-info product-container__price-info--value">{priceFormat(productCard.price)}</p>
-               {
-               thereIsTheBasket ? <button className="button button--red-border" style={{width: "100%"}}>В корзине</button> :
-               <button className="button button--red button--big product-container__button" onClick={() => dispatch(addToCart({product: productCard, qty: DEFAULT_QTY}))}>Добавить в корзину</button>
-               } 
+              {
+                thereIsTheBasket ? <button className="button button--red-border" style={{ width: "100%" }}>В корзине</button> :
+                  <button className="button button--red button--big product-container__button" onClick={() => dispatch(addToCart({ product: productCard, qty: DEFAULT_QTY }))}>Добавить в корзину</button>
+              }
             </div>
           </div>
-          <Comments id={params.id} onShowModal={onShowModal}/>
+          <Comments id={params.id} onShowModal={onShowModal} />
         </div>
       </main>
     </>

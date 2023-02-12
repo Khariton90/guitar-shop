@@ -8,7 +8,7 @@ type ModalSuccessReview = {
   onClickModalClose: () => void,
 }
 
-export function ModalSuccessReview({onClickModalClose}: ModalSuccessReview): JSX.Element {
+export function ModalSuccessReview({ onClickModalClose }: ModalSuccessReview): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const param = useParams();

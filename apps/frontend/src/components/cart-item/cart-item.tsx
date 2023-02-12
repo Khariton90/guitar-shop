@@ -3,7 +3,6 @@ import { decrementQty, incrementQty } from "../../store/action";
 import { ProductDto } from "../../types/product.dto"
 import { priceFormat } from "../../utils";
 
-
 type CartItemProps = {
   product: ProductDto,
   qty: number;

@@ -59,7 +59,7 @@ export function AddProductItemPage(): JSX.Element {
 
   useEffect(() => {
     if (productImage) {
-      dispatch(addProduct({...product, image: productImage}));
+      dispatch(addProduct({ ...product, image: productImage }));
     }
 
     if (!selectedFile) {
@@ -111,7 +111,7 @@ export function AddProductItemPage(): JSX.Element {
                 </div>
                 <div className="edit-item-image__btn-wrap">
                   <button className="button button--small button--black-border edit-item-image__btn">Добавить
-                    <input type="file" required className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage}/>
+                    <input type="file" required className="file hidden" accept=".jpg, .jpeg, .png" onChange={handleSetPreviewImage} />
                   </button>
                   <button className="button button--small button--black-border edit-item-image__btn" onClick={handleDeleteImage}>Удалить</button>
                 </div>
@@ -125,38 +125,38 @@ export function AddProductItemPage(): JSX.Element {
                 <label htmlFor="ukulele">Укулеле</label>
               </div>
               <div className="input-radio add-item__form-radio"><span>Количество струн</span>
-                <input type="radio" id="string-qty-4" name="strings" value={StringEnum.Four} defaultChecked onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="string-qty-4" name="strings" value={StringEnum.Four} defaultChecked onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="string-qty-4">4</label>
-                <input type="radio" id="string-qty-6" name="strings" value={StringEnum.Six} onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="string-qty-6" name="strings" value={StringEnum.Six} onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="string-qty-6">6</label>
-                <input type="radio" id="string-qty-7" name="strings" value={StringEnum.Seven} onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="string-qty-7" name="strings" value={StringEnum.Seven} onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="string-qty-7">7</label>
-                <input type="radio" id="string-qty-12" name="strings" value={StringEnum.Twelve} onChange={(evt) => handleChange(evt)}/>
+                <input type="radio" id="string-qty-12" name="strings" value={StringEnum.Twelve} onChange={(evt) => handleChange(evt)} />
                 <label htmlFor="string-qty-12">12</label>
               </div>
             </div>
             <div className="add-item__form-right">
               <div className="custom-input add-item__form-input">
                 <label><span>Дата добавления товара</span>
-                  <input type="date" required name="date" placeholder="Дата в формате 00.00.0000" onChange={(evt) => handleChange(evt)}/>
+                  <input type="date" required name="date" placeholder="Дата в формате 00.00.0000" onChange={(evt) => handleChange(evt)} />
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input">
                 <label><span>Введите наименование товара</span>
-                  <input type="text" required name="title" placeholder="Наименование" minLength={10} onChange={(evt) => handleChange(evt)}/>
+                  <input type="text" required name="title" placeholder="Наименование" minLength={10} onChange={(evt) => handleChange(evt)} />
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input add-item__form-input--price is-placeholder">
                 <label><span>Введите цену товара</span>
-                  <input type="number" required min={100} max={100000} name="price" placeholder="Цена в формате 00 000" onChange={(evt) => handleChange(evt)}/>
+                  <input type="number" required min={100} max={100000} name="price" placeholder="Цена в формате 00 000" onChange={(evt) => handleChange(evt)} />
                 </label>
                 <p>Заполните поле</p>
               </div>
               <div className="custom-input add-item__form-input">
                 <label><span>Введите артикул товара</span>
-                  <input type="text" required name="article" placeholder="Артикул товара" onChange={(evt) => handleChange(evt)}/>
+                  <input type="text" required name="article" placeholder="Артикул товара" onChange={(evt) => handleChange(evt)} />
                 </label>
                 <p>Заполните поле</p>
               </div>

@@ -33,5 +33,4 @@ export class ProductsEntity implements Product {
   public toObject() {
     return {...this};
   }
-
 }

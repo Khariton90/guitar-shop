@@ -33,7 +33,7 @@ export function ModalReview({ title, onClickModalClose }: ModalReviewProps): JSX
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (params.id) {
-      dispatch(addNewComment({...formReview, id: params.id, date: new Date()}));
+      dispatch(addNewComment({ ...formReview, id: params.id, date: new Date() }));
       setShowSuccess((prev) => (prev = true));
     }
   }
@@ -46,7 +46,7 @@ export function ModalReview({ title, onClickModalClose }: ModalReviewProps): JSX
   }
 
   if (showSuccess) {
-    return <ModalSuccessReview onClickModalClose={onClickModalClose}/>
+    return <ModalSuccessReview onClickModalClose={onClickModalClose} />
   }
   return (
     <div>
@@ -60,51 +60,51 @@ export function ModalReview({ title, onClickModalClose }: ModalReviewProps): JSX
                 <h3 className="form-review__title">{title}</h3>
                 <div><span className="form-review__label form-review__label--required form-review__label--star">Ваша Оценка</span>
                   <div className="rate rate--reverse">
-                    <input className="visually-hidden" id="star-5" name="rating" type="radio" value="5" onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-5" name="rating" type="radio" value="5" onChange={handleChange} />
                     <label className="rate__label" htmlFor="star-5" title="Отлично"></label>
-                    <input className="visually-hidden" id="star-4" name="rating" type="radio" value="4" onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-4" name="rating" type="radio" value="4" onChange={handleChange} />
                     <label className="rate__label" htmlFor="star-4" title="Хорошо"></label>
-                    <input className="visually-hidden" id="star-3" name="rating" type="radio" value="3" onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-3" name="rating" type="radio" value="3" onChange={handleChange} />
                     <label className="rate__label" htmlFor="star-3" title="Нормально"></label>
-                    <input className="visually-hidden" id="star-2" name="rating" type="radio" value="2" onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-2" name="rating" type="radio" value="2" onChange={handleChange} />
                     <label className="rate__label" htmlFor="star-2" title="Плохо"></label>
-                    <input className="visually-hidden" id="star-1" name="rating" type="radio" value="1" defaultChecked onChange={handleChange}/>
+                    <input className="visually-hidden" id="star-1" name="rating" type="radio" value="1" defaultChecked onChange={handleChange} />
                     <label className="rate__label" htmlFor="star-1" title="Ужасно"></label>
                     <p className="rate__message">Поставьте оценку</p>
                   </div>
                 </div>
               </div>
               <label className="form-review__label form-review__label--required" htmlFor="advantage">Достоинства</label>
-              <input className="form-review__input" 
-              required
-              minLength={CommentСharacteristics.Min}
-              maxLength={CommentСharacteristics.Max}
-              id="advantage" 
-              type="text" 
-              autoComplete="off" 
-              name="dignities"
-               onChange={handleChange}/>
+              <input className="form-review__input"
+                required
+                minLength={CommentСharacteristics.Min}
+                maxLength={CommentСharacteristics.Max}
+                id="advantage"
+                type="text"
+                autoComplete="off"
+                name="dignities"
+                onChange={handleChange} />
               <p className="form-review__warning">Заполните поле</p>
               <label className="form-review__label form-review__label--required" htmlFor="disadv">Недостатки</label>
               <input className="form-review__input"
-              required
-              minLength={CommentСharacteristics.Min}
-              maxLength={CommentСharacteristics.Max}
-              id="disadv" 
-              type="text" 
-              autoComplete="off" 
-              name="disadvantage" 
-              onChange={handleChange}/>
+                required
+                minLength={CommentСharacteristics.Min}
+                maxLength={CommentСharacteristics.Max}
+                id="disadv"
+                type="text"
+                autoComplete="off"
+                name="disadvantage"
+                onChange={handleChange} />
               <p className="form-review__warning">Заполните поле</p>
               <label className="form-review__label form-review__label--required form-review__label--textarea" htmlFor="comment">Комментарий</label>
               <textarea className="form-review__input form-review__input--textarea"
-              required
-              minLength={CommentText.Min}
-              maxLength={CommentText.Max}
-              id="comment"
-              autoComplete="off" 
-              name="comment" 
-              onChange={handleChange}></textarea>
+                required
+                minLength={CommentText.Min}
+                maxLength={CommentText.Max}
+                id="comment"
+                autoComplete="off"
+                name="comment"
+                onChange={handleChange}></textarea>
               <p className="form-review__warning">Заполните поле</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>

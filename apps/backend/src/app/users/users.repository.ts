@@ -8,12 +8,10 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersRepository implements CRUDRepository<UsersEntity, string, User> {
-
   constructor(
     @InjectModel(UserModel.name) private readonly usersModel: Model<UserModel>,
   ) {}
 
-  
   public async findById(id: string): Promise<User> {
     return await this.usersModel.findById(id).exec();
   }

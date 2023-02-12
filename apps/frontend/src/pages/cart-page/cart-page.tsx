@@ -12,9 +12,9 @@ import { useEffect } from "react";
 
 export function CartPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const products = useAppSelector(({cartReducer}) => cartReducer.cart);
-  const orderSuccess = useAppSelector(({dataReducer}) => dataReducer.orderSuccess);
-  const loadedStatus = useAppSelector(({dataReducer}) => dataReducer.loadedStatus);
+  const products = useAppSelector(({ cartReducer }) => cartReducer.cart);
+  const orderSuccess = useAppSelector(({ dataReducer }) => dataReducer.orderSuccess);
+  const loadedStatus = useAppSelector(({ dataReducer }) => dataReducer.loadedStatus);
   const amount = products.reduce((acc, element) => element.product.price * element.qty + acc, 0);
 
   const onRemoveFromCart = (id: string) => {
@@ -43,31 +43,31 @@ export function CartPage(): JSX.Element {
 
   return (
     <>
-    {orderSuccess ? <ModalOrderSuccess orderSuccess/> : null}
-    <main className="page-content">
-      <div className="container">
-        <h1 className="title title--bigger page-content__title">Корзина</h1>
-        <ul className="breadcrumbs page-content__breadcrumbs page-content__breadcrumbs--on-cart-page">
-          <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Главная</Link>
-          </li>
-          <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Каталог</Link>
-          </li>
-          <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Cart}>Корзина</Link>
-          </li>
-        </ul>
-        <div className="cart">
-          {products.length ? products.map((product) => <CartItem {...product} key={product.product.id} onRemoveFromCart={onRemoveFromCart} />) :
-            <p>В корзине нет товаров</p>}
-          {products.length ?
-            <div className="cart__footer">
-              <div className="cart__total-info">
-                <p className="cart__total-item"><span className="cart__total-value-name">Всего:</span><span className="cart__total-value">{priceFormat(amount)}</span></p>
-                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{priceFormat(amount)}</span></p>
-                <button className="button button--red button--big cart__order-button" onClick={handleClickAddOrder}>Оформить заказ</button>
-              </div>
-            </div> : null}
+      {orderSuccess ? <ModalOrderSuccess orderSuccess /> : null}
+      <main className="page-content">
+        <div className="container">
+          <h1 className="title title--bigger page-content__title">Корзина</h1>
+          <ul className="breadcrumbs page-content__breadcrumbs page-content__breadcrumbs--on-cart-page">
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Главная</Link>
+            </li>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Main}>Каталог</Link>
+            </li>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoute.Cart}>Корзина</Link>
+            </li>
+          </ul>
+          <div className="cart">
+            {products.length ? products.map((product) => <CartItem {...product} key={product.product.id} onRemoveFromCart={onRemoveFromCart} />) :
+              <p>В корзине нет товаров</p>}
+            {products.length ?
+              <div className="cart__footer">
+                <div className="cart__total-info">
+                  <p className="cart__total-item"><span className="cart__total-value-name">Всего:</span><span className="cart__total-value">{priceFormat(amount)}</span></p>
+                  <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{priceFormat(amount)}</span></p>
+                  <button className="button button--red button--big cart__order-button" onClick={handleClickAddOrder}>Оформить заказ</button>
+                </div>
+              </div> : null}
+          </div>
         </div>
-      </div>
-    </main></>
+      </main></>
   )
 }

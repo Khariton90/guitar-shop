@@ -52,7 +52,6 @@ export function ProductListPage(): JSX.Element {
     setShowDeleteCart((prevValue) => (prevValue = card));
   }
 
-
   const onChangeField = (evt: ChangeEvent<HTMLInputElement>) => {
     setChangeForm((prevForm) => ({
       ...prevForm,
@@ -109,11 +108,11 @@ export function ProductListPage(): JSX.Element {
               <div className="catalog-sort">
                 <h2 className="catalog-sort__title">Сортировать:</h2>
                 <div className="catalog-sort__type">
-                  <button className={cn("catalog-sort__type-button", {"catalog-sort__type-button--active": sortType === 'date'})} aria-label="по цене" onClick={() => handleSort('date')}>по дате</button>
-                  <button className={cn("catalog-sort__type-button", {"catalog-sort__type-button--active": sortType === 'price'})} aria-label="по цене" onClick={() => handleSort('price')}>по цене</button>
-                  <button className={cn("catalog-sort__type-button", {"catalog-sort__type-button--active": sortType === 'rating'})} aria-label="по популярности"  onClick={() => handleSort('rating')}>по популярности</button>
+                  <button className={cn("catalog-sort__type-button", { "catalog-sort__type-button--active": sortType === 'date' })} aria-label="по цене" onClick={() => handleSort('date')}>по дате</button>
+                  <button className={cn("catalog-sort__type-button", { "catalog-sort__type-button--active": sortType === 'price' })} aria-label="по цене" onClick={() => handleSort('price')}>по цене</button>
+                  <button className={cn("catalog-sort__type-button", { "catalog-sort__type-button--active": sortType === 'rating' })} aria-label="по популярности" onClick={() => handleSort('rating')}>по популярности</button>
                 </div>
-                <CatalogSortOrder type={sortType} onSetQuery={onSetQuery}/>
+                <CatalogSortOrder type={sortType} onSetQuery={onSetQuery} />
               </div>
               <div className="catalog-cards">
                 <ul className="catalog-cards__list">

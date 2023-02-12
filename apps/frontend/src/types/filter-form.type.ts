@@ -1,4 +1,3 @@
-
 export type FilterForm = {
   priceMin: string;
   priceMax: string;
