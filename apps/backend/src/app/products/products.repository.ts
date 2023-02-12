@@ -1,3 +1,4 @@
+import { CreateProductDto } from './dto/create-product-dto';
 import { ProductsQuery } from './query/products.query';
 import { DEFAULT_LIMIT_PRODUCTS } from './products.constant';
 import { ProductsModel } from './products.model';
@@ -46,6 +47,10 @@ export class ProductsRepository {
   
   public async destroy(id: string): Promise<void> {
     await this.productsModel.findOneAndDelete({id});
+  }
+
+  public async update(id: string, dto:CreateProductDto) {
+    return await this.productsModel.findByIdAndUpdate(id, dto, {new: true}).exec();
   }
 
   public async getTotalCount(): Promise<number | undefined> {

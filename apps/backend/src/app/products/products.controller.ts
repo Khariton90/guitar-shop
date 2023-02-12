@@ -6,7 +6,7 @@ import { ResponseProductDto } from './rdo/response-product.dto';
 import { fillObject } from '@guitar-shop/core';
 import { CreateProductDto } from './dto/create-product-dto';
 import { JwtAuthGuard } from './../guards/jwt-auth.guard';
-import { Body, Controller, Post, UseGuards, Get, Param, Res, UploadedFile, UseInterceptors, Query, Delete } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, Param, Res, UploadedFile, UseInterceptors, Query, Delete, Put } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -72,6 +72,13 @@ export class ProductsController {
   @Delete('/delete/:id')
   async delete(@Param('id') id: string) {
     await this.productsService.delete(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('/update/:id')
+  async update(@Param('id') id: string, @Body() dto: CreateProductDto) {
+    const product = await this.productsService.update(id, dto);
+    return fillObject(ResponseProductDto, product);
   }
 }
 

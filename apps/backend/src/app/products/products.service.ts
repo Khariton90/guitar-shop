@@ -34,4 +34,18 @@ export class ProductsService {
   async delete(id: string) {
     await this.productsRepository.destroy(id);
   }
+
+  async update(id: string, dto: CreateProductDto) {
+    const { title, description, image, type, article, strings, price } = dto;
+    return await this.productsRepository.update(id, {
+      title,
+      description,
+      image,
+      type,
+      article,
+      strings,
+      price,
+      date: new Date()
+    });
+  }
 }

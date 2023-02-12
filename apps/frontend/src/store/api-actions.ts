@@ -106,6 +106,17 @@ export const addProduct = createAsyncThunk<void, ProductDto, {dispatch: AppDispa
   },
 );
 
+export const changeProduct = createAsyncThunk<void, ProductDto, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
+  'data/changeProduct',
+  async (product, {dispatch, extra: api}) => {
+    const {data} = await api.put<ProductDto>(`${ApiRoute.ProductList}/update/${product.id}`, product);
+    dispatch(setProductCard(data));
+    dispatch(redirectToRoute(AppRoute.Main));
+    dispatch(setProductImage(''));
+    dispatch(setProductCard(null));
+  },
+);
+
 export const deleteProduct = createAsyncThunk<void, Id, {dispatch: AppDispatch, state: State, extra: AxiosInstance}>(
   'data/deleteProduct',
   async (id, {dispatch, extra: api}) => {
